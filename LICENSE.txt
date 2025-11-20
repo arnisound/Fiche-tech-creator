@@ -1,0 +1,61 @@
+LICENSE - FICHE TECH CREATOR
+========================================
+
+Copyright © 2025 Théo Arnissolle
+Tous droits réservés
+
+LICENCE D'UTILISATION NON-COMMERCIALE
+========================================
+
+1. DROITS ACCORDÉS
+
+Ce logiciel est mis à disposition pour un usage personnel et non-commercial 
+uniquement. Vous êtes autorisé à :
+
+   ✓ Utiliser le logiciel à des fins personnelles
+   ✓ Utiliser le logiciel à des fins éducatives
+   ✓ Utiliser le logiciel à des fins de démonstration non-commerciale
+
+2. RESTRICTIONS
+
+Les actions suivantes sont strictement INTERDITES sans autorisation écrite 
+préalable de l'auteur :
+
+   ✗ Utilisation commerciale (vente, location, prestation de services payants)
+   ✗ Modification, adaptation ou création d'œuvres dérivées
+   ✗ Distribution, redistribution ou publication du code source
+   ✗ Sous-licence ou transfert de droits à des tiers
+   ✗ Suppression ou modification des mentions de copyright
+   ✗ Utilisation du nom "Fiche Tech Creator" ou du nom de l'auteur 
+     pour promouvoir des produits dérivés
+
+3. UTILISATION COMMERCIALE
+
+Toute utilisation commerciale de ce logiciel nécessite une licence commerciale 
+distincte. Pour obtenir une autorisation d'utilisation commerciale, veuillez 
+contacter l'auteur à l'adresse suivante :
+
+   Email : arnisound.tools@gmail.com
+
+4. ABSENCE DE GARANTIE
+
+CE LOGICIEL EST FOURNI "TEL QUEL", SANS GARANTIE D'AUCUNE SORTE, EXPLICITE 
+OU IMPLICITE, Y COMPRIS, MAIS SANS S'Y LIMITER, LES GARANTIES DE 
+COMMERCIALISATION, D'ADÉQUATION À UN USAGE PARTICULIER ET D'ABSENCE DE 
+CONTREFAÇON. EN AUCUN CAS, L'AUTEUR NE POURRA ÊTRE TENU RESPONSABLE DE 
+TOUT DOMMAGE, RÉCLAMATION OU AUTRE RESPONSABILITÉ DÉCOULANT DE L'UTILISATION 
+DU LOGICIEL.
+
+5. JURIDICTION
+
+Cette licence est régie par le droit français. Tout litige relatif à cette 
+licence sera soumis à la compétence exclusive des tribunaux français.
+
+========================================
+Pour toute question concernant cette licence ou pour obtenir une autorisation 
+d'utilisation commerciale, veuillez contacter :
+
+Théo Arnissolle
+Email : arnisound.tools@gmail.com
+Date : Novembre 2025
+========================================
