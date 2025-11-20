@@ -3918,7 +3918,7 @@
                             `<option value="${color.value}" ${color.value === item.color ? 'selected' : ''}>${color.name}</option>`
                         ).join('')}
                     </select>
-                    <button class="delete-btn" onclick="deleteChannel(${index}); event.stopPropagation();">✕</button>
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteChannel(${index});">✕</button>
                 `;
                 
                 tbody.appendChild(row);
