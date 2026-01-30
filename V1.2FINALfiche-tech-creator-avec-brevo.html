@@ -1844,6 +1844,7 @@
                     <button class="btn-success" onclick="exportExcel()">📊 Exporter Excel</button>
                     <button class="btn-secondary" onclick="openStagePlan()">🎭 Ouvrir Stage Plan</button>
                     <button class="btn-secondary" onclick="restart()">🔄 Nouvelle fiche</button>
+                    <button class="btn-primary" onclick="nextToDisposition()">➡️ Poursuivre la fiche technique</button>
                 </div>
             </div>
         </div>
@@ -4496,6 +4497,11 @@
         }
         
         // Ouvrir Stage Plan avec les données de la fiche technique
+        function nextToDisposition() {
+            localStorage.setItem('patchList', JSON.stringify(patchList));
+            window.location.href = 'disposition-scenique.html';
+        }
+
         function openStagePlan() {
             const sharedData = {
                 source: 'fiche-tech-creator',
