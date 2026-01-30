@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=fiche-tech-creator.html">
+    <title>Redirection...</title>
+</head>
+<body>
+    <p>Redirection en cours...</p>
+</body>
+</html>
+```
+
+## Structure de ton repo
+
+Ton repo devrait ressembler à ça :
+```
+ton-repo/
+├── index.html                    ← Page d'accueil
+├── fiche-tech-creator.html       ← Ton app Fiche Tech
+├── stage-plan.html               ← Ton app Stage Plan
+└── (autres fichiers si nécessaire)
