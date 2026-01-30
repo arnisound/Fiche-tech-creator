@@ -1842,7 +1842,9 @@
                 <div class="buttons">
                     <button class="btn-primary" onclick="downloadPDF()">📥 Télécharger PDF</button>
                     <button class="btn-success" onclick="exportExcel()">📊 Exporter Excel</button>
+                    <button class="btn-secondary" onclick="openStagePlan()">🎭 Ouvrir Stage Plan</button>
                     <button class="btn-secondary" onclick="restart()">🔄 Nouvelle fiche</button>
+                    <button class="btn-primary" onclick="nextToDisposition()">➡️ Poursuivre la fiche technique</button>
                 </div>
             </div>
         </div>
@@ -4494,6 +4496,49 @@
             document.body.removeChild(link);
         }
         
+        // Ouvrir Stage Plan avec les données de la fiche technique
+        function nextToDisposition() {
+            localStorage.setItem('patchList', JSON.stringify(patchList));
+            window.location.href = 'disposition-scenique.html';
+        }
+
+        function openStagePlan() {
+            const sharedData = {
+                source: 'fiche-tech-creator',
+                timestamp: Date.now(),
+                groupName: formData.groupName || '',
+                contactName: formData.contactName || '',
+                contactEmail: formData.contactEmail || '',
+                contactPhone: formData.contactPhone || '',
+                style: formData.style || '',
+                numMusicians: formData.numMusicians || 0,
+                instruments: formData.instruments || {},
+                patchList: patchList.map(item => ({
+                    channel: item.channel,
+                    instrument: item.instrument,
+                    mic: item.mic,
+                    stand: item.stand || '',
+                    category: item.category || '',
+                    color: item.color || ''
+                })),
+                returnsList: returnsList.map(item => ({
+                    channel: item.channel,
+                    name: item.name,
+                    type: item.type,
+                    musician: item.musician || ''
+                })),
+                monitoring: formData.musicianMonitoring || [],
+                technical: formData.technical || {}
+            };
+
+            try {
+                localStorage.setItem('arnisound_shared_data', JSON.stringify(sharedData));
+                window.open('Stage-Plan-V21-ModeGenerique (1).html', '_blank');
+            } catch (e) {
+                alert('Erreur lors du transfert des données : ' + e.message);
+            }
+        }
+
         function restart() {
             location.reload();
         }
@@ -4543,6 +4588,60 @@
                     checkConsoleCapacityRealTime();
                 });
             }
+
+            // ============================================
+            // IMPORT DONNÉES DEPUIS STAGE PLAN
+            // ============================================
+            (function importFromStagePlan() {
+                try {
+                    const raw = localStorage.getItem('arnisound_shared_data');
+                    if (!raw) return;
+
+                    const data = JSON.parse(raw);
+                    if (data.source !== 'stage-plan') return;
+
+                    // Ne pas réimporter si plus de 5 minutes
+                    if (Date.now() - data.timestamp > 5 * 60 * 1000) {
+                        localStorage.removeItem('arnisound_shared_data');
+                        return;
+                    }
+
+                    // Consommer les données (import unique)
+                    localStorage.removeItem('arnisound_shared_data');
+
+                    // Afficher une bannière d'import
+                    const banner = document.createElement('div');
+                    banner.style.cssText = 'background: linear-gradient(135deg, #1a472a 0%, #2d5a3f 100%); color: white; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; border-bottom: 2px solid #C19A3E; animation: slideDown 0.3s ease;';
+
+                    let infoText = 'Donnees importees depuis <strong>Stage Plan</strong>';
+                    if (data.patchList && data.patchList.length > 0) {
+                        infoText += ` | ${data.patchList.length} canaux dans le patch`;
+                    }
+                    if (data.elements && data.elements.length > 0) {
+                        infoText += ` | ${data.elements.length} elements sur scene`;
+                    }
+
+                    banner.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span>${infoText}</span>
+                        </div>
+                        <button onclick="this.parentElement.remove()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Fermer</button>
+                    `;
+
+                    const container = document.querySelector('.container');
+                    if (container) {
+                        container.insertBefore(banner, container.firstChild);
+                    }
+
+                    // Si des informations sur le patch existent, les stocker pour utilisation ultérieure
+                    if (data.patchList && data.patchList.length > 0) {
+                        window._stagePlanImportData = data;
+                    }
+
+                } catch (e) {
+                    console.warn('Erreur import Stage Plan:', e);
+                }
+            })();
         });
         
         function checkConsoleCapacityRealTime() {
