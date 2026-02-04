@@ -44,19 +44,16 @@
         .header {
             background: linear-gradient(180deg, #000000 0%, #ffffff 300%);
             color: white;
-            padding: 40px;
+            padding: 45px 45px;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .header h1 {
-            font-size: 32px;
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
+        .header svg {
+            max-width: 100%;
+            height: auto;
         }
 
         .progress-bar {
@@ -392,10 +389,6 @@
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 24px;
-            }
-
             .buttons {
                 flex-direction: column;
             }
@@ -415,8 +408,87 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🎭 Disposition Scénique</h1>
-            <p>Organisez votre configuration scénique avant de générer le plan</p>
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <svg width="1000" height="200" viewBox="0 0 1600 320" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                    <!-- Cercle blanc -->
+                    <circle cx="400" cy="160" r="140" fill="none" stroke="#FFFFFF" stroke-width="12"/>
+
+                    <!-- Texte DISPOSITION -->
+                    <text x="400" y="140"
+                          fill="#FFFFFF"
+                          font-family="Arial, Helvetica, sans-serif"
+                          font-weight="bold"
+                          font-size="30"
+                          text-anchor="middle"
+                          letter-spacing="2">DISPOSITION</text>
+
+                    <!-- Texte SCÉNIQUE -->
+                    <text x="400" y="185"
+                          fill="#FFFFFF"
+                          font-family="Arial, Helvetica, sans-serif"
+                          font-weight="bold"
+                          font-size="36"
+                          text-anchor="middle"
+                          letter-spacing="3">SCÉNIQUE</text>
+
+                    <!-- Forme d'onde dorée -->
+                    <path d="M 330 250
+                             C 338 250, 343 247, 348 243
+                             C 353 239, 358 247, 363 250
+                             C 368 253, 373 254, 378 253
+                             C 383 252, 388 243, 396 237
+                             C 404 231, 409 237, 414 243
+                             C 419 249, 424 253, 429 254
+                             C 434 255, 439 254, 444 253
+                             C 449 252, 454 250, 459 250.5
+                             C 464 251, 466.5 251.5, 469 252"
+                          fill="none"
+                          stroke="#C19A3E"
+                          stroke-width="4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"/>
+
+                    <!-- Groupe texte ARNISOUND TOOLS -->
+                    <g transform="translate(1050, 0)">
+                        <!-- Texte ARNISOUND -->
+                        <text x="0" y="100"
+                              fill="#FFFFFF"
+                              font-family="Arial, Helvetica, sans-serif"
+                              font-weight="bold"
+                              font-size="38"
+                              text-anchor="middle"
+                              letter-spacing="2">ARNISOUND</text>
+
+                        <!-- Texte TOOLS -->
+                        <text x="0" y="145"
+                              fill="#FFFFFF"
+                              font-family="Arial, Helvetica, sans-serif"
+                              font-weight="bold"
+                              font-size="38"
+                              text-anchor="middle"
+                              letter-spacing="3">TOOLS</text>
+
+                        <!-- Texte LIVE & AV -->
+                        <text x="0" y="190"
+                              fill="#FFFFFF"
+                              font-family="Arial, Helvetica, sans-serif"
+                              font-weight="bold"
+                              font-size="38"
+                              text-anchor="middle"
+                              letter-spacing="3">LIVE &amp; AV</text>
+
+                        <!-- Texte APP -->
+                        <text x="0" y="235"
+                              fill="#FFFFFF"
+                              font-family="Arial, Helvetica, sans-serif"
+                              font-weight="bold"
+                              font-size="38"
+                              text-anchor="middle"
+                              letter-spacing="3">APP</text>
+                    </g>
+                </svg>
+                <p style="color: white; font-size: 1.1em; margin-top: 15px; margin-bottom: 0; opacity: 0.95; text-align: center;">Organisez votre configuration scénique avant de générer le plan</p>
+            </div>
         </div>
 
         <div class="progress-bar">
@@ -584,6 +656,33 @@
             </div>
         </div>
     </div>
+
+    <!-- Footer de copyright -->
+    <footer style="background: #000000;
+                   color: #666;
+                   text-align: center;
+                   padding: 20px 20px;
+                   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                   font-size: 0.5em;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <p style="margin: 5px 0;">
+                <strong>Disposition Scénique v1.0</strong>
+            </p>
+            <p style="margin: 5px 0;">
+                © 2025 Théo Arnissolle - Tous droits réservés
+            </p>
+            <p style="margin: 5px 0;">
+                <a href="mailto:arnisound.tools@gmail.com"
+                   style="color: #c19a3e; text-decoration: none;">
+                    arnisound.tools@gmail.com
+                </a>
+            </p>
+            <p style="margin: 10px 0 5px 0; font-size: 0.85em;">
+                Usage personnel et non-commercial uniquement •
+                <a href="LICENSE.txt" style="color: #c19a3e; text-decoration: none;">Voir la licence</a>
+            </p>
+        </div>
+    </footer>
 
     <script>
         // Variables globales
