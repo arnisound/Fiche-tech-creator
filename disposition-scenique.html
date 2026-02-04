@@ -391,6 +391,24 @@
             margin-top: 5px;
         }
 
+        .return-color-badge {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+
+        .returns-aux-cell {
+            font-weight: bold;
+            color: #c19a3e;
+            font-size: 14px;
+        }
+
+        .returns-type-cell {
+            font-weight: 500;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 24px;
@@ -499,6 +517,27 @@
                     <button class="btn-add-group" onclick="addCustomGroup()">+ Ajouter un groupe personnalisé</button>
                 </div>
 
+                <!-- Retours Musiciens -->
+                <div id="returnsSection" class="grouping-section" style="display: none;">
+                    <h2 class="section-title">🎧 Retours Musiciens</h2>
+                    <p style="color: #666; margin-bottom: 15px;">Informations importées depuis votre Fiche Tech Creator :</p>
+                    <div class="table-wrapper">
+                        <table class="grouping-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">AUX</th>
+                                    <th style="width: 300px;">Musicien</th>
+                                    <th style="width: 200px;">Type de retour</th>
+                                    <th style="width: 100px;">Couleur</th>
+                                </tr>
+                            </thead>
+                            <tbody id="returnsTableBody">
+                                <!-- Sera rempli dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <!-- Options de génération -->
                 <div class="options-section">
                     <h2 class="section-title">⚙️ Options de génération du plan</h2>
@@ -588,6 +627,7 @@
     <script>
         // Variables globales
         let patchList = [];
+        let returnsList = [];
         let groupColumns = ['batterie', 'guitare', 'basse', 'clavier', 'voix', 'choeurs'];
         let groupIcons = {
             'batterie': '🥁',
@@ -615,15 +655,24 @@
         function loadPatchData() {
             try {
                 const storedData = localStorage.getItem('patchList');
-                
+                const storedReturns = localStorage.getItem('returnsList');
+
                 if (storedData && storedData !== 'null' && storedData !== '[]') {
                     patchList = JSON.parse(storedData);
-                    
+
                     if (patchList && patchList.length > 0) {
                         document.getElementById('noDataAlert').style.display = 'none';
                         document.getElementById('mainContent').style.display = 'block';
                         initializeTable();
                         updateSummary();
+
+                        // Charger les retours musiciens
+                        if (storedReturns && storedReturns !== 'null' && storedReturns !== '[]') {
+                            returnsList = JSON.parse(storedReturns);
+                            if (returnsList && returnsList.length > 0) {
+                                initializeReturnsTable();
+                            }
+                        }
                     } else {
                         showNoDataAlert();
                     }
@@ -773,6 +822,51 @@
             document.getElementById('summaryBox').style.display = assignedTracks > 0 ? 'block' : 'none';
         }
 
+        // Initialiser le tableau des retours musiciens
+        function initializeReturnsTable() {
+            const section = document.getElementById('returnsSection');
+            const tbody = document.getElementById('returnsTableBody');
+            tbody.innerHTML = '';
+
+            returnsList.forEach(item => {
+                const row = document.createElement('tr');
+                if (item.color) {
+                    row.style.borderLeft = '5px solid ' + item.color;
+                }
+
+                // AUX
+                const auxCell = document.createElement('td');
+                auxCell.className = 'returns-aux-cell';
+                auxCell.textContent = item.isStereo ? 'AUX ' + item.aux + '-' + item.auxPair : 'AUX ' + item.aux;
+                row.appendChild(auxCell);
+
+                // Musicien (destination)
+                const nameCell = document.createElement('td');
+                nameCell.className = 'instrument-cell';
+                nameCell.textContent = item.destination || '-';
+                row.appendChild(nameCell);
+
+                // Type de retour
+                const typeCell = document.createElement('td');
+                typeCell.className = 'returns-type-cell';
+                typeCell.textContent = item.type || '-';
+                row.appendChild(typeCell);
+
+                // Couleur
+                const colorCell = document.createElement('td');
+                colorCell.style.textAlign = 'center';
+                const badge = document.createElement('span');
+                badge.className = 'return-color-badge';
+                badge.style.backgroundColor = item.color || '#cccccc';
+                colorCell.appendChild(badge);
+                row.appendChild(colorCell);
+
+                tbody.appendChild(row);
+            });
+
+            section.style.display = 'block';
+        }
+
         // Ajouter un groupe personnalisé
         function addCustomGroup() {
             const groupName = prompt('Nom du groupe personnalisé:');
@@ -872,6 +966,7 @@
             // Préparer les données pour Stage Plan
             const stageData = {
                 groups: stageGroups,
+                returns: returnsList,
                 options: options,
                 timestamp: new Date().toISOString(),
                 source: 'disposition-scenique',

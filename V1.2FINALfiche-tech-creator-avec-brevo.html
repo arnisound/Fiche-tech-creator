@@ -2539,6 +2539,11 @@
             saveCurrentQuestion(8);
             patchList = generatePatchList();
             returnsList = generateReturnsList();
+
+            // Sauvegarder dans localStorage pour la disposition scénique
+            localStorage.setItem('patchList', JSON.stringify(patchList));
+            localStorage.setItem('returnsList', JSON.stringify(returnsList));
+
             checkConsoleCapacity();
             displayResults();
             
