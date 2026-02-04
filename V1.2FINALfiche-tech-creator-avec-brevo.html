@@ -1842,6 +1842,7 @@
                 <div class="buttons">
                     <button class="btn-primary" onclick="downloadPDF()">📥 Télécharger PDF</button>
                     <button class="btn-success" onclick="exportExcel()">📊 Exporter Excel</button>
+                    <button class="btn-primary" onclick="window.location.href='disposition-scenique.html'">🎭 Disposition Scénique →</button>
                     <button class="btn-secondary" onclick="restart()">🔄 Nouvelle fiche</button>
                 </div>
             </div>
@@ -2519,6 +2520,7 @@
             returnsList = generateReturnsList();
             checkConsoleCapacity();
             displayResults();
+            savePatchListToStorage();
             
             document.querySelectorAll('.question-container').forEach(q => q.classList.remove('active'));
             document.getElementById('resultContainer').classList.add('active');
@@ -4032,12 +4034,13 @@
                     // Réorganiser le tableau patchList
                     const item = patchList.splice(evt.oldIndex, 1)[0];
                     patchList.splice(evt.newIndex, 0, item);
-                    
+
                     // Renumeroter les canaux
                     patchList.forEach((item, index) => {
                         item.channel = index + 1;
                     });
-                    
+
+                    savePatchListToStorage();
                     renderPatchList();
                     initSortable();
                 }
@@ -4080,8 +4083,14 @@
         }
         
         
+        // Sauvegarder patchList dans localStorage pour les autres pages
+        function savePatchListToStorage() {
+            localStorage.setItem('patchList', JSON.stringify(patchList));
+        }
+
         function updatePatchItem(index, field, value) {
             patchList[index][field] = value;
+            savePatchListToStorage();
             if (field === 'color') {
                 renderPatchList();
                 initSortable();
@@ -4094,6 +4103,7 @@
                 patchList.forEach((item, i) => {
                     item.channel = i + 1;
                 });
+                savePatchListToStorage();
                 renderPatchList();
                 initSortable();
             }
@@ -4110,6 +4120,7 @@
                 color: '#2ecc71'
             };
             patchList.push(newChannel);
+            savePatchListToStorage();
             renderPatchList();
             initSortable();
         }
