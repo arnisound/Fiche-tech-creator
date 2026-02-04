@@ -247,6 +247,23 @@
             font-size: 1em;
         }
 
+        .monitoring-card .musician-name-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .monitoring-card .musician-name-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
         .monitoring-options {
             display: flex;
             flex-direction: column;
@@ -2176,6 +2193,9 @@
                 card.className = 'monitoring-card';
                 card.innerHTML = `
                     <h4>Musicien ${i}</h4>
+                    <input type="text" class="musician-name-input" id="musician-name-${i}"
+                           placeholder="Nom du musicien ${i}"
+                           value="${formData.musicianMonitoring[i-1]?.name || ''}">
                     <div class="monitoring-options">
                         <label class="monitoring-option">
                             <input type="radio" name="monitor-${i}" value="wedge" checked>
@@ -2474,8 +2494,10 @@
                     formData.musicianMonitoring = [];
                     for (let i = 1; i <= formData.numMusicians; i++) {
                         const selected = document.querySelector(`input[name="monitor-${i}"]:checked`)?.value || 'wedge';
+                        const musicianName = document.getElementById(`musician-name-${i}`)?.value?.trim() || '';
                         formData.musicianMonitoring.push({
                             musician: i,
+                            name: musicianName,
                             type: selected
                         });
                     }
@@ -3676,7 +3698,7 @@
             // Retours individuels
             formData.musicianMonitoring.forEach((monitor, index) => {
                 let type = '';
-                let musicianName = `Musicien ${monitor.musician}`;
+                let musicianName = monitor.name ? `${monitor.name}` : `Musicien ${monitor.musician}`;
                 let color = availableColors[index % availableColors.length].value;
                 
                 switch(monitor.type) {
