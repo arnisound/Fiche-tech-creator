@@ -391,6 +391,140 @@
             margin-top: 5px;
         }
 
+        /* ---- Section scène ---- */
+        .stage-section { margin-bottom: 40px; }
+
+        .stage-legend {
+            background: #f8f9fa;
+            border-left: 4px solid #c19a3e;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .legend-item { font-size: 0.88em; color: #444; line-height: 1.4; }
+        .legend-icon { font-size: 1.1em; }
+
+        .stage-wrapper { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+
+        .stage-top-label, .stage-bottom-label {
+            font-weight: bold; text-align: center;
+            padding: 10px 24px; border-radius: 8px;
+            font-size: 14px; letter-spacing: 0.5px;
+        }
+        .stage-top-label { background: #1a1a2e; color: #c19a3e; }
+        .stage-bottom-label { background: #1a3a1a; color: #4caf50; }
+
+        .stage-outer { display: flex; align-items: stretch; gap: 8px; }
+
+        .side-label {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.72em; font-weight: bold; text-align: center;
+            padding: 10px 6px; border-radius: 8px; white-space: nowrap;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .side-label.jardin {
+            transform: rotate(180deg);
+            background: #e8eaf6; color: #3949ab;
+        }
+        .side-label.cour { background: #fce4ec; color: #c62828; }
+
+        /* ---- Grille 7×5 ---- */
+        .stage-grid-container { flex: 1; display: flex; flex-direction: column; gap: 4px; overflow-x: auto; }
+
+        .stage-grid-header, .stage-row {
+            display: grid;
+            grid-template-columns: 58px repeat(7, 1fr);
+            gap: 4px;
+            min-width: 600px;
+        }
+
+        .corner-cell { /* espace vide en haut à gauche */ }
+
+        .col-header {
+            text-align: center; font-size: 0.7em; color: #888;
+            padding: 4px 2px; border-bottom: 2px solid #ddd;
+            font-weight: 600;
+        }
+
+        .row-header {
+            display: flex; align-items: center; justify-content: flex-end;
+            font-size: 0.7em; color: #888; padding-right: 8px;
+            border-right: 2px solid #ddd; font-weight: 600;
+        }
+
+        .stage-cell {
+            background: #fafafa;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            min-height: 75px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 5px; padding: 6px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .stage-cell:hover { border-color: #c19a3e; background: #fff9f0; }
+        .stage-cell.has-group { border-color: #4caf50; background: #f1f8f1; }
+
+        .cell-groups {
+            display: flex; flex-wrap: wrap; gap: 4px;
+            justify-content: center; width: 100%;
+        }
+
+        .group-chip {
+            display: flex; align-items: center; gap: 3px;
+            padding: 3px 8px; border-radius: 12px;
+            font-size: 0.72em; font-weight: bold; color: #fff;
+            max-width: 100%; overflow: hidden;
+        }
+        .group-chip .chip-remove {
+            cursor: pointer; opacity: 0.7; margin-left: 2px; flex-shrink: 0;
+        }
+        .group-chip .chip-remove:hover { opacity: 1; }
+
+        .cell-add-btn {
+            background: transparent;
+            border: 1px dashed #ccc;
+            color: #aaa; border-radius: 6px;
+            padding: 2px 10px; cursor: pointer;
+            font-size: 1em; line-height: 1.6;
+            transition: all 0.2s;
+        }
+        .cell-add-btn:hover { border-color: #c19a3e; color: #c19a3e; }
+
+        /* ---- Modal ---- */
+        .modal {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55); z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: #fff; border: 2px solid #c19a3e;
+            border-radius: 16px; padding: 28px; min-width: 300px; max-width: 420px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+        .modal-content h4 { color: #c19a3e; margin-bottom: 16px; font-size: 1.15em; }
+        .group-picker-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px; border-radius: 8px; cursor: pointer;
+            transition: background 0.2s; color: #333;
+            border: 1px solid transparent;
+        }
+        .group-picker-item:hover { background: #fff9f0; border-color: #c19a3e; }
+        .group-picker-item.already-here { opacity: 0.45; cursor: default; }
+        .group-picker-no-active { color: #888; font-size: 0.9em; padding: 10px 0; }
+        .btn-cancel {
+            margin-top: 14px; background: #f0f0f0; color: #666;
+            border: none; border-radius: 8px; padding: 9px 20px;
+            cursor: pointer; font-size: 0.95em; width: 100%;
+        }
+        .btn-cancel:hover { background: #e0e0e0; }
+
+        .position-cell select { display: none; } /* masquer l'ancien select si présent */
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 24px;
@@ -439,11 +573,10 @@
                 <div class="info-box">
                     <h3>📋 Comment ça fonctionne :</h3>
                     <ul>
-                        <li><strong>Étape 1 :</strong> Pour chaque piste, cochez le groupe correspondant (batterie, guitare, etc.)</li>
-                        <li><strong>Étape 2 :</strong> Définissez la position scénique pour chaque piste groupée</li>
-                        <li><strong>Étape 3 :</strong> Les pistes d'un même groupe doivent avoir la même position</li>
-                        <li><strong>Étape 4 :</strong> Configurez les options de génération automatique</li>
-                        <li><strong>Étape 5 :</strong> Générez votre plan de scène avec des éléments génériques positionnés automatiquement</li>
+                        <li><strong>Étape 1 :</strong> Pour chaque piste, cochez le groupe de retour correspondant (Musicien 1, Musicien 2, etc.)</li>
+                        <li><strong>Étape 2 :</strong> Sur le tableau de scène ci-dessous, cliquez <strong>＋</strong> dans une cellule pour y placer un groupe</li>
+                        <li><strong>Étape 3 :</strong> Configurez les options de génération automatique</li>
+                        <li><strong>Étape 4 :</strong> Générez votre plan de scène</li>
                     </ul>
                 </div>
 
@@ -482,7 +615,6 @@
                                     <th style="width: 250px;">Instrument</th>
                                     <th style="width: 200px;">Microphone</th>
                                     <!-- Colonnes de groupe générées dynamiquement depuis la Patch List Retours -->
-                                    <th style="width: 220px;">📍 Position Scène</th>
                                 </tr>
                             </thead>
                             <tbody id="groupingTableBody">
@@ -492,6 +624,38 @@
                     </div>
 
                     <button class="btn-add-group" onclick="addCustomGroup()">+ Ajouter un groupe personnalisé</button>
+                </div>
+
+                <!-- Tableau de scène 7x5 -->
+                <div class="stage-section">
+                    <h2 class="section-title">🎭 Disposition sur scène</h2>
+
+                    <div class="stage-legend">
+                        <div class="legend-item"><span class="legend-icon">🎭</span> <strong>Fond de scène (Upstage)</strong> — rangée 1 en haut, dos au public</div>
+                        <div class="legend-item"><span class="legend-icon">🎤</span> <strong>Devant de scène (Downstage)</strong> — rangée 5 en bas, côté public</div>
+                        <div class="legend-item"><span class="legend-icon">🌿</span> <strong>Jardin</strong> — côté gauche vu du public (droite pour les musiciens sur scène)</div>
+                        <div class="legend-item"><span class="legend-icon">⚖️</span> <strong>Cour</strong> — côté droit vu du public (gauche pour les musiciens sur scène)</div>
+                        <div class="legend-item">💡 Assignez d'abord les pistes aux groupes dans le tableau ci-dessus, puis cliquez <strong>＋</strong> dans une cellule pour y placer un groupe.</div>
+                    </div>
+
+                    <div class="stage-wrapper">
+                        <div class="stage-top-label">🎭 FOND DE SCÈNE — Upstage</div>
+                        <div class="stage-outer">
+                            <div class="side-label jardin">🌿 JARDIN<br>(gauche public)</div>
+                            <div id="stageGrid" class="stage-grid-container"></div>
+                            <div class="side-label cour">⚖️ COUR<br>(droite public)</div>
+                        </div>
+                        <div class="stage-bottom-label">🎤 DEVANT — Public</div>
+                    </div>
+                </div>
+
+                <!-- Modal picker de groupe -->
+                <div id="groupPickerModal" class="modal" style="display:none;">
+                    <div class="modal-content">
+                        <h4>Placer un groupe ici</h4>
+                        <div id="groupPickerList"></div>
+                        <button class="btn-cancel" onclick="closeGroupPicker()">Annuler</button>
+                    </div>
                 </div>
 
                 <!-- Options de génération -->
@@ -635,19 +799,18 @@
         // Générer les en-têtes de colonnes dynamiquement
         function updateTableHeaders() {
             const headerRow = document.getElementById('tableHeader');
-            // Supprimer les colonnes de groupe existantes (tout sauf les 3 premières et la dernière)
+            // Garder les 3 premières colonnes fixes (Canal, Instrument, Microphone)
             const ths = Array.from(headerRow.children);
-            for (let i = ths.length - 2; i >= 3; i--) {
+            for (let i = ths.length - 1; i >= 3; i--) {
                 headerRow.removeChild(ths[i]);
             }
-            // Insérer les nouvelles colonnes dynamiques avant "Position Scène"
-            const lastTh = headerRow.lastElementChild;
+            // Ajouter les colonnes dynamiques (noms de destination des retours)
             groupColumns.forEach(groupId => {
                 const th = document.createElement('th');
                 th.style.borderBottom = `3px solid ${groupColors[groupId] || '#cccccc'}`;
                 th.innerHTML = `${groupIcons[groupId]} ${groupNames[groupId]}`;
-                th.title = `AUX ${groupId.replace('retour_', '')}`;
-                headerRow.insertBefore(th, lastTh);
+                th.title = groupId.startsWith('retour_') ? `AUX ${groupId.replace('retour_', '')}` : groupId;
+                headerRow.appendChild(th);
             });
         }
 
@@ -678,6 +841,7 @@
                 }
 
                 updateTableHeaders();
+                buildStageGrid();
 
                 if (storedData && storedData !== 'null' && storedData !== '[]') {
                     patchList = JSON.parse(storedData);
@@ -747,30 +911,6 @@
                     row.appendChild(checkCell);
                 });
 
-                // Position scène
-                const positionCell = document.createElement('td');
-                positionCell.className = 'position-cell';
-                
-                const select = document.createElement('select');
-                select.dataset.trackIndex = index;
-                select.disabled = true;
-                select.addEventListener('change', updateSummary);
-                select.innerHTML = `
-                    <option value="">-- Sélectionner --</option>
-                    <option value="back-left">Fond gauche (jardin)</option>
-                    <option value="back-center">Fond centre</option>
-                    <option value="back-right">Fond droite (cour)</option>
-                    <option value="mid-left">Milieu gauche</option>
-                    <option value="mid-center">Milieu centre</option>
-                    <option value="mid-right">Milieu droite</option>
-                    <option value="front-left">Avant gauche</option>
-                    <option value="front-center">Avant centre</option>
-                    <option value="front-right">Avant droite</option>
-                `;
-                
-                positionCell.appendChild(select);
-                row.appendChild(positionCell);
-
                 tbody.appendChild(row);
             });
         }
@@ -778,29 +918,25 @@
         // Gérer le changement de checkbox
         function handleGroupChange(e) {
             const checkbox = e.target;
-            const trackIndex = checkbox.dataset.trackIndex;
             const groupId = checkbox.dataset.group;
             const row = checkbox.closest('tr');
-            const positionSelect = row.querySelector('.position-cell select');
 
             if (checkbox.checked) {
                 // Décocher les autres checkboxes de cette ligne
                 row.querySelectorAll('input[type="checkbox"]').forEach(cb => {
                     if (cb !== checkbox) {
+                        // Si un autre groupe était coché, le retirer de la scène
+                        if (cb.checked) removeGroupFromPosition(cb.dataset.group);
                         cb.checked = false;
                     }
                 });
-                
-                // Activer le select de position
-                positionSelect.disabled = false;
                 row.classList.add('has-group');
             } else {
-                // Désactiver le select de position
-                positionSelect.disabled = true;
-                positionSelect.value = '';
+                // Retirer le groupe de sa position sur la scène
+                removeGroupFromPosition(groupId);
                 row.classList.remove('has-group');
             }
-            
+
             updateSummary();
         }
 
@@ -808,30 +944,27 @@
         function updateSummary() {
             const tbody = document.getElementById('groupingTableBody');
             const rows = Array.from(tbody.rows);
-            
+
             const totalTracks = patchList.length;
             let assignedTracks = 0;
             const activeGroupsSet = new Set();
-            const stageZonesSet = new Set();
-            
+
             rows.forEach(row => {
                 const checkedBox = row.querySelector('input[type="checkbox"]:checked');
                 if (checkedBox) {
                     assignedTracks++;
                     activeGroupsSet.add(checkedBox.dataset.group);
-                    
-                    const position = row.querySelector('.position-cell select').value;
-                    if (position) {
-                        stageZonesSet.add(position);
-                    }
                 }
             });
-            
+
+            // Compter les zones de scène utilisées depuis groupPositions
+            const stageZonesSet = new Set(Object.values(groupPositions));
+
             document.getElementById('totalTracks').textContent = totalTracks;
             document.getElementById('assignedTracks').textContent = assignedTracks;
             document.getElementById('activeGroups').textContent = activeGroupsSet.size;
             document.getElementById('stageZones').textContent = stageZonesSet.size;
-            
+
             // Afficher le résumé si des pistes sont assignées
             document.getElementById('summaryBox').style.display = assignedTracks > 0 ? 'block' : 'none';
         }
@@ -857,47 +990,256 @@
             const thead = document.querySelector('.grouping-table thead tr');
             const newTh = document.createElement('th');
             newTh.textContent = `${icon || '🎵'} ${groupName}`;
-            thead.insertBefore(newTh, thead.lastElementChild);
-            
+            thead.appendChild(newTh);
+
             // Ajouter la checkbox dans chaque ligne
             const tbody = document.getElementById('groupingTableBody');
             Array.from(tbody.rows).forEach((row, index) => {
                 const checkCell = document.createElement('td');
                 checkCell.className = 'checkbox-cell';
-                
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.dataset.trackIndex = index;
                 checkbox.dataset.group = groupId;
                 checkbox.addEventListener('change', handleGroupChange);
-                
+
                 checkCell.appendChild(checkbox);
-                row.insertBefore(checkCell, row.lastElementChild);
+                row.appendChild(checkCell);
             });
         }
+
+        // ============================================================
+        // GRILLE DE SCÈNE 7×5
+        // ============================================================
+
+        // Stockage des positions : { groupId: positionId }
+        let groupPositions = {};
+        let currentPickerPosition = null;
+
+        const STAGE_ROWS = [
+            { id: 'r1', label: 'Fond' },
+            { id: 'r2', label: 'Arrière' },
+            { id: 'r3', label: 'Milieu' },
+            { id: 'r4', label: 'Avant' },
+            { id: 'r5', label: 'Devant' }
+        ];
+        const STAGE_COLS = [
+            { id: 'j2', label: 'J.Ext',  title: 'Jardin extrême' },
+            { id: 'j1', label: 'Jardin', title: 'Jardin' },
+            { id: 'jc', label: 'J.Ctr',  title: 'Jardin centre' },
+            { id: 'c',  label: 'Centre', title: 'Centre' },
+            { id: 'cc', label: 'C.Ctr',  title: 'Cour centre' },
+            { id: 'c1', label: 'Cour',   title: 'Cour' },
+            { id: 'c2', label: 'C.Ext',  title: 'Cour extrême' }
+        ];
+
+        function buildStageGrid() {
+            const grid = document.getElementById('stageGrid');
+            grid.innerHTML = '';
+
+            // Ligne d'en-tête des colonnes
+            const headerRow = document.createElement('div');
+            headerRow.className = 'stage-grid-header';
+            const corner = document.createElement('div');
+            corner.className = 'corner-cell';
+            headerRow.appendChild(corner);
+            STAGE_COLS.forEach(col => {
+                const th = document.createElement('div');
+                th.className = 'col-header';
+                th.textContent = col.label;
+                th.title = col.title;
+                headerRow.appendChild(th);
+            });
+            grid.appendChild(headerRow);
+
+            // Lignes de cellules
+            STAGE_ROWS.forEach(row => {
+                const rowEl = document.createElement('div');
+                rowEl.className = 'stage-row';
+
+                const rowLabel = document.createElement('div');
+                rowLabel.className = 'row-header';
+                rowLabel.textContent = row.label;
+                rowEl.appendChild(rowLabel);
+
+                STAGE_COLS.forEach(col => {
+                    const posId = `${row.id}_${col.id}`;
+                    const cell = document.createElement('div');
+                    cell.className = 'stage-cell';
+                    cell.dataset.position = posId;
+
+                    const cellGroups = document.createElement('div');
+                    cellGroups.className = 'cell-groups';
+                    cellGroups.id = `cell-${posId}`;
+
+                    const addBtn = document.createElement('button');
+                    addBtn.className = 'cell-add-btn';
+                    addBtn.textContent = '＋';
+                    addBtn.onclick = () => showGroupPicker(posId);
+
+                    cell.appendChild(cellGroups);
+                    cell.appendChild(addBtn);
+                    rowEl.appendChild(cell);
+                });
+                grid.appendChild(rowEl);
+            });
+        }
+
+        // Ouvrir le modal pour choisir un groupe à placer dans une cellule
+        function showGroupPicker(position) {
+            currentPickerPosition = position;
+            const list = document.getElementById('groupPickerList');
+            list.innerHTML = '';
+
+            const activeGroups = getActiveGroups();
+
+            if (activeGroups.length === 0) {
+                const msg = document.createElement('p');
+                msg.className = 'group-picker-no-active';
+                msg.textContent = 'Aucun groupe actif. Cochez d\'abord des pistes dans le tableau.';
+                list.appendChild(msg);
+            } else {
+                activeGroups.forEach(groupId => {
+                    const alreadyHere = groupPositions[groupId] === position;
+                    const item = document.createElement('div');
+                    item.className = 'group-picker-item' + (alreadyHere ? ' already-here' : '');
+
+                    const dot = document.createElement('span');
+                    dot.style.cssText = `background:${groupColors[groupId] || '#888'};width:14px;height:14px;border-radius:50%;display:inline-block;flex-shrink:0;`;
+
+                    const label = document.createElement('span');
+                    label.textContent = `${groupIcons[groupId] || ''} ${groupNames[groupId] || groupId}`;
+
+                    item.appendChild(dot);
+                    item.appendChild(label);
+
+                    if (alreadyHere) {
+                        const badge = document.createElement('span');
+                        badge.style.cssText = 'color:#4caf50;font-size:0.85em;margin-left:auto;';
+                        badge.textContent = '✓ Déjà ici';
+                        item.appendChild(badge);
+                    } else {
+                        item.onclick = () => assignGroupToPosition(groupId, position);
+                    }
+                    list.appendChild(item);
+                });
+            }
+
+            document.getElementById('groupPickerModal').style.display = 'flex';
+        }
+
+        function closeGroupPicker() {
+            document.getElementById('groupPickerModal').style.display = 'none';
+            currentPickerPosition = null;
+        }
+
+        function assignGroupToPosition(groupId, position) {
+            // Retirer le groupe de son ancienne position si nécessaire
+            if (groupPositions[groupId]) {
+                removeGroupChip(groupId, groupPositions[groupId]);
+                updateStageCellStyle(groupPositions[groupId]);
+            }
+            groupPositions[groupId] = position;
+            renderGroupChip(groupId, position);
+            closeGroupPicker();
+            updateStageCellStyle(position);
+            updateSummary();
+        }
+
+        function removeGroupFromPosition(groupId) {
+            const position = groupPositions[groupId];
+            if (position) {
+                removeGroupChip(groupId, position);
+                delete groupPositions[groupId];
+                updateStageCellStyle(position);
+                updateSummary();
+            }
+        }
+
+        function renderGroupChip(groupId, position) {
+            const container = document.getElementById(`cell-${position}`);
+            if (!container) return;
+            // Éviter les doublons
+            const existing = document.getElementById(`chip-${groupId}`);
+            if (existing) existing.remove();
+
+            const chip = document.createElement('div');
+            chip.className = 'group-chip';
+            chip.id = `chip-${groupId}`;
+            // Couleur du chip : utiliser la couleur du groupe avec contraste auto
+            const bgColor = groupColors[groupId] || '#888888';
+            chip.style.backgroundColor = bgColor;
+            chip.style.color = isLightColor(bgColor) ? '#000' : '#fff';
+
+            chip.innerHTML = `${groupIcons[groupId] || ''} ${groupNames[groupId] || groupId}`;
+
+            const removeBtn = document.createElement('span');
+            removeBtn.className = 'chip-remove';
+            removeBtn.textContent = ' ✕';
+            removeBtn.onclick = (e) => { e.stopPropagation(); removeGroupFromPosition(groupId); };
+            chip.appendChild(removeBtn);
+
+            container.appendChild(chip);
+        }
+
+        function removeGroupChip(groupId) {
+            const chip = document.getElementById(`chip-${groupId}`);
+            if (chip) chip.remove();
+        }
+
+        function updateStageCellStyle(position) {
+            const cell = document.querySelector(`.stage-cell[data-position="${position}"]`);
+            if (!cell) return;
+            const hasGroups = Object.values(groupPositions).includes(position);
+            cell.classList.toggle('has-group', hasGroups);
+        }
+
+        // Retourne les groupIds qui ont au moins 1 checkbox cochée dans le tableau
+        function getActiveGroups() {
+            const active = new Set();
+            document.querySelectorAll('#groupingTableBody input[type="checkbox"]:checked').forEach(cb => {
+                active.add(cb.dataset.group);
+            });
+            return Array.from(active);
+        }
+
+        // Détermine si une couleur hex est claire (pour choisir texte noir ou blanc)
+        function isLightColor(hex) {
+            const c = hex.replace('#', '');
+            const r = parseInt(c.substr(0,2),16);
+            const g = parseInt(c.substr(2,2),16);
+            const b = parseInt(c.substr(4,2),16);
+            return (r * 299 + g * 587 + b * 114) / 1000 > 128;
+        }
+
+        // ============================================================
+        // GÉNÉRER ET OUVRIR STAGE PLAN
+        // ============================================================
 
         // Générer et ouvrir Stage Plan
         function generateAndOpenStagePlan() {
             const stageGroups = {};
             const tbody = document.getElementById('groupingTableBody');
             let hasErrors = false;
-            
+
             // Parcourir toutes les lignes
             Array.from(tbody.rows).forEach(row => {
                 const trackIndex = row.dataset.trackIndex;
                 const track = patchList[trackIndex];
-                
+
                 const checkedBox = row.querySelector('input[type="checkbox"]:checked');
                 if (checkedBox) {
                     const groupId = checkedBox.dataset.group;
-                    const position = row.querySelector('.position-cell select').value;
-                    
+                    // Lire la position depuis le tableau de scène (groupPositions)
+                    const position = groupPositions[groupId];
+
                     if (!position) {
-                        alert(`⚠️ Veuillez définir une position pour "${track.instrument}"`);
+                        alert(`⚠️ Veuillez placer le groupe "${groupNames[groupId] || groupId}" sur le tableau de scène.`);
                         hasErrors = true;
                         return;
                     }
-                    
+
                     if (!stageGroups[groupId]) {
                         stageGroups[groupId] = {
                             tracks: [],
@@ -905,18 +1247,14 @@
                             icon: groupIcons[groupId],
                             name: groupNames[groupId]
                         };
-                    } else if (stageGroups[groupId].position !== position) {
-                        alert(`⚠️ Toutes les pistes du groupe "${groupNames[groupId]}" doivent avoir la même position!`);
-                        hasErrors = true;
-                        return;
                     }
-                    
+
                     stageGroups[groupId].tracks.push(track);
                 }
             });
-            
+
             if (hasErrors) return;
-            
+
             if (Object.keys(stageGroups).length === 0) {
                 alert('⚠️ Veuillez assigner au moins une piste à un groupe avant de générer le plan.');
                 return;
