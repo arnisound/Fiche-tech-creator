@@ -4219,12 +4219,12 @@
 
                 if (formData.technical.consoles && formData.technical.consoles.length > 0) {
                     const consolesText = formData.technical.consoles.map(c => c.name).join(', ');
-                    drawTechRow('Régie :', `Console numérique avec patch. Préférences : ${consolesText}.`);
+                    drawTechRow('Régie :', `Une console numérique et son patch numérique ou analogique. Préférences pour ${consolesText}.`);
                 }
 
                 if (formData.technical.speakerSystems && formData.technical.speakerSystems.length > 0) {
                     const systemsText = formData.technical.speakerSystems.join(', ');
-                    drawTechRow('Diffusion :', `Système adapté au lieu (Type : ${systemsText}), égalisé et en phase, installé et prêt à l'arrivée du groupe.`);
+                    drawTechRow('Diffusion :', `Un système de diffusion adapté au lieu (Type : ${systemsText}), égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l'arrivée du groupe.`);
                 }
 
                 if (formData.technical.monitorSystems && formData.technical.monitorSystems.length > 0) {
