@@ -1241,11 +1241,17 @@
                     }
 
                     if (!stageGroups[groupId]) {
+                        const auxNum = groupId.startsWith('retour_') ? parseInt(groupId.replace('retour_', '')) : null;
+                        const retourEntry = returnsList.find(r => r.aux === auxNum);
                         stageGroups[groupId] = {
                             tracks: [],
                             position: position,
                             icon: groupIcons[groupId],
-                            name: groupNames[groupId]
+                            name: groupNames[groupId],
+                            color: groupColors[groupId] || '#888888',
+                            auxNum: retourEntry ? retourEntry.aux : null,
+                            auxPair: retourEntry ? retourEntry.auxPair : null,
+                            monitorType: retourEntry ? retourEntry.type : null
                         };
                     }
 
@@ -1283,7 +1289,7 @@
             localStorage.setItem('stageGroupsData', JSON.stringify(stageData));
             
             // Ouvrir Stage Plan
-            window.location.href = 'stage-plan.html';
+            window.location.href = 'Stage-Plan-V21-ModeGenerique (1).html';
         }
     </script>
 </body>
