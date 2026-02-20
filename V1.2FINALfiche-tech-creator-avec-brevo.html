@@ -4184,7 +4184,7 @@
             doc.text(`Nombre de musiciens : ${formData.numMusicians}`, 20, y);
             
             // Configuration Technique
-            if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.speakerSystems.length > 0)) {
+            if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.effects.length > 0 || formData.technical.speakerSystems.length > 0 || formData.technical.monitorSystems.length > 0)) {
                 y += 15;
                 // Barre de titre dorée
                 doc.setGState(new doc.GState({opacity: 0.85}));
@@ -4259,7 +4259,7 @@
             const allItems = [
                 ...Object.entries(micCount).sort().map(([k, v]) => ({ label: k, count: v })),
                 ...Object.entries(standCount).sort().map(([k, v]) => ({ label: k, count: v })),
-                ...(patchList.length > 0 ? [{ label: 'Câble XLR', count: patchList.length }] : [])
+                ...(patchList.length > 0 ? [{ label: patchList.length > 1 ? 'Câbles XLR' : 'Câble XLR', count: patchList.length, noPlural: true }] : [])
             ];
             for (const item of allItems) {
                 if (y > 265) break;
@@ -4272,7 +4272,7 @@
                 doc.rect(22, y - 3, 2, 4, 'F');
                 doc.setTextColor(0, 0, 0);
                 doc.text(`${item.count}x`, 27, y);
-                doc.text(`${item.label}${item.count > 1 ? 's' : ''}`, 40, y);
+                doc.text(item.noPlural ? item.label : `${item.label}${item.count > 1 ? 's' : ''}`, 40, y);
                 y += 6;
                 micRowIndex++;
             }
@@ -4454,7 +4454,7 @@
             csv += `Nombre de musiciens,${formData.numMusicians}\n\n`;
             
             // Configuration Technique
-            if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.speakerSystems.length > 0)) {
+            if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.effects.length > 0 || formData.technical.speakerSystems.length > 0 || formData.technical.monitorSystems.length > 0)) {
                 csv += 'CONFIGURATION TECHNIQUE\n';
                 
                 if (formData.technical.consoles && formData.technical.consoles.length > 0) {
