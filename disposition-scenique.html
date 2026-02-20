@@ -481,12 +481,7 @@
                                     <th style="width: 60px;">Canal</th>
                                     <th style="width: 250px;">Instrument</th>
                                     <th style="width: 200px;">Microphone</th>
-                                    <th>🥁 Batterie</th>
-                                    <th>🎸 Guitare</th>
-                                    <th>🎸 Basse</th>
-                                    <th>🎹 Clavier</th>
-                                    <th>🎤 Voix Lead</th>
-                                    <th>🎵 Chœurs</th>
+                                    <!-- Colonnes de groupe générées dynamiquement depuis la Patch List Retours -->
                                     <th style="width: 220px;">📍 Position Scène</th>
                                 </tr>
                             </thead>
@@ -588,8 +583,15 @@
     <script>
         // Variables globales
         let patchList = [];
-        let groupColumns = ['batterie', 'guitare', 'basse', 'clavier', 'voix', 'choeurs'];
-        let groupIcons = {
+        let returnsList = [];
+        let groupColumns = [];
+        let groupIcons = {};
+        let groupNames = {};
+        let groupColors = {};
+
+        // Colonnes de secours si pas de returnsList disponible
+        const defaultGroupColumns = ['batterie', 'guitare', 'basse', 'clavier', 'voix', 'choeurs'];
+        const defaultGroupIcons = {
             'batterie': '🥁',
             'guitare': '🎸',
             'basse': '🎸',
@@ -597,7 +599,7 @@
             'voix': '🎤',
             'choeurs': '🎵'
         };
-        let groupNames = {
+        const defaultGroupNames = {
             'batterie': 'Batterie',
             'guitare': 'Guitare',
             'basse': 'Basse',
@@ -605,6 +607,49 @@
             'voix': 'Voix Lead',
             'choeurs': 'Chœurs'
         };
+
+        // Construire les colonnes dynamiques depuis la patch list retours
+        function buildDynamicColumns() {
+            groupColumns = [];
+            groupIcons = {};
+            groupNames = {};
+            groupColors = {};
+
+            const typeIcons = {
+                'Wedge': '🔊',
+                'IEM Mono': '🎧',
+                'IEM Stéréo': '🎧',
+                'Link Mono': '📢',
+                'Stéréo': '📢'
+            };
+
+            returnsList.forEach(retour => {
+                const id = `retour_${retour.aux}`;
+                groupColumns.push(id);
+                groupIcons[id] = typeIcons[retour.type] || '🔊';
+                groupNames[id] = retour.destination || `AUX ${retour.aux}`;
+                groupColors[id] = retour.color || '#888888';
+            });
+        }
+
+        // Générer les en-têtes de colonnes dynamiquement
+        function updateTableHeaders() {
+            const headerRow = document.getElementById('tableHeader');
+            // Supprimer les colonnes de groupe existantes (tout sauf les 3 premières et la dernière)
+            const ths = Array.from(headerRow.children);
+            for (let i = ths.length - 2; i >= 3; i--) {
+                headerRow.removeChild(ths[i]);
+            }
+            // Insérer les nouvelles colonnes dynamiques avant "Position Scène"
+            const lastTh = headerRow.lastElementChild;
+            groupColumns.forEach(groupId => {
+                const th = document.createElement('th');
+                th.style.borderBottom = `3px solid ${groupColors[groupId] || '#cccccc'}`;
+                th.innerHTML = `${groupIcons[groupId]} ${groupNames[groupId]}`;
+                th.title = `AUX ${groupId.replace('retour_', '')}`;
+                headerRow.insertBefore(th, lastTh);
+            });
+        }
 
         // Charger les données au démarrage
         window.addEventListener('DOMContentLoaded', function() {
@@ -615,10 +660,28 @@
         function loadPatchData() {
             try {
                 const storedData = localStorage.getItem('patchList');
-                
+                const storedReturns = localStorage.getItem('returnsList');
+
+                // Charger returnsList et construire les colonnes dynamiques
+                if (storedReturns && storedReturns !== 'null' && storedReturns !== '[]') {
+                    returnsList = JSON.parse(storedReturns);
+                    if (returnsList && returnsList.length > 0) {
+                        buildDynamicColumns();
+                    }
+                }
+
+                // Utiliser les colonnes par défaut si pas de returnsList
+                if (groupColumns.length === 0) {
+                    groupColumns = [...defaultGroupColumns];
+                    groupIcons = { ...defaultGroupIcons };
+                    groupNames = { ...defaultGroupNames };
+                }
+
+                updateTableHeaders();
+
                 if (storedData && storedData !== 'null' && storedData !== '[]') {
                     patchList = JSON.parse(storedData);
-                    
+
                     if (patchList && patchList.length > 0) {
                         document.getElementById('noDataAlert').style.display = 'none';
                         document.getElementById('mainContent').style.display = 'block';
