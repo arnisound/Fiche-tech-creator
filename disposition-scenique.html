@@ -540,7 +540,45 @@
                 grid-template-columns: 1fr;
             }
         }
+        /* ---- Export buttons in disposition-scenique ---- */
+        .export-btns-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 0;
+        }
+        .btn-export-scene {
+            flex: 1;
+            padding: 12px 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.88em;
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ffa500 0%, #ffd700 100%);
+            color: #1a1a1a;
+            transition: all 0.2s ease;
+        }
+        .btn-export-scene:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(255,165,0,0.4);
+        }
+        .btn-export-scene.btn-png {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+        }
+        .btn-export-scene.btn-png:hover {
+            box-shadow: 0 4px 14px rgba(106,17,203,0.4);
+        }
+        .export-hint {
+            font-size: 0.78em;
+            color: #999;
+            text-align: center;
+            margin-top: 8px;
+        }
+        /* ------------------------------------------------ */
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -738,6 +776,16 @@
                     <button class="btn btn-primary" onclick="generateAndOpenStagePlan()">
                         Générer le plan de scène →
                     </button>
+                </div>
+
+                <!-- Export Plan de Scène -->
+                <div style="margin-top: 20px; background: linear-gradient(135deg,#1a1a1a,#2d2d2d); border-radius: 12px; padding: 18px 16px 12px;" id="exportSceneBlock">
+                    <div style="color:#ffd700; font-weight:700; font-size:1em; text-align:center; margin-bottom:12px;">📤 Exporter le plan de scène</div>
+                    <div class="export-btns-row">
+                        <button class="btn-export-scene" onclick="exportScenePlanPDF()" title="Exporter le plan de scène en PDF">📄 PDF</button>
+                        <button class="btn-export-scene btn-png" onclick="exportScenePlanPNG()" title="Exporter le plan de scène en PNG">🖼️ PNG</button>
+                    </div>
+                    <div class="export-hint">Positionnez les groupes sur la scène avant d'exporter</div>
                 </div>
             </div>
         </div>
@@ -1290,6 +1338,68 @@
             // Ouvrir Stage Plan
             window.location.href = 'Stage-Plan-V21-ModeGenerique (1).html';
         }
+
+        // ============================================================
+        // EXPORTS PLAN DE SCÈNE
+        // ============================================================
+
+        function _getSceneGroupName() {
+            // Tenter de récupérer le nom du groupe depuis le localStorage
+            try {
+                const fd = JSON.parse(localStorage.getItem('formData') || '{}');
+                return fd.groupName || 'Plan_de_Scene';
+            } catch(e) {
+                return 'Plan_de_Scene';
+            }
+        }
+
+        function exportScenePlanPNG() {
+            const target = document.querySelector('.container');
+            if (!target) return;
+            html2canvas(target, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false })
+                .then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `PlanScene_${_getSceneGroupName().replace(/\s+/g, '_')}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                })
+                .catch(() => alert('Erreur lors de la génération du PNG.'));
+        }
+
+        function exportScenePlanPDF() {
+            const target = document.querySelector('.container');
+            if (!target) return;
+            html2canvas(target, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false })
+                .then(canvas => {
+                    const { jsPDF } = window.jspdf;
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+                    const pdfW = pdf.internal.pageSize.getWidth();
+                    const pdfH = pdf.internal.pageSize.getHeight();
+                    const ratio = Math.min(pdfW / canvas.width, pdfH / canvas.height);
+                    const imgW = canvas.width * ratio;
+                    const imgH = canvas.height * ratio;
+                    const offsetX = (pdfW - imgW) / 2;
+                    const offsetY = (pdfH - imgH) / 2;
+                    pdf.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
+                    pdf.save(`PlanScene_${_getSceneGroupName().replace(/\s+/g, '_')}.pdf`);
+                })
+                .catch(() => alert('Erreur lors de la génération du PDF.'));
+        }
+
+        // Vérifier si un format d'export a été demandé depuis la page principale
+        (function checkExportSignal() {
+            const fmt = localStorage.getItem('scenePlanExportFormat');
+            if (fmt) {
+                localStorage.removeItem('scenePlanExportFormat');
+                // Mettre en évidence le bloc export
+                const block = document.getElementById('exportSceneBlock');
+                if (block) {
+                    block.style.boxShadow = '0 0 0 3px #ffd700';
+                    block.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
+            }
+        })();
     </script>
 </body>
 </html>
