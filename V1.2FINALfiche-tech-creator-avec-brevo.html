@@ -4186,80 +4186,95 @@
             // Configuration Technique
             if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.speakerSystems.length > 0)) {
                 y += 15;
-                doc.setFontSize(16);
-                doc.text('CONFIGURATION TECHNIQUE', 20, y);
-                
+                // Barre de titre dorée
+                doc.setGState(new doc.GState({opacity: 0.85}));
+                doc.setFillColor(222, 173, 57);
+                doc.rect(20, y - 6, 170, 9, 'F');
+                doc.setGState(new doc.GState({opacity: 1.0}));
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(255, 255, 255);
+                doc.text('CONFIGURATION TECHNIQUE', 25, y);
+                doc.setTextColor(0, 0, 0);
+
                 y += 10;
-                doc.setFontSize(10);
-                
+                doc.setFontSize(9);
+
+                let rowIndex = 0;
+                const drawTechRow = (label, value) => {
+                    if (rowIndex % 2 === 0) {
+                        doc.setFillColor(245, 245, 245);
+                        doc.rect(20, y - 4, 170, 6, 'F');
+                    }
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(80, 80, 80);
+                    doc.text(label, 22, y);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(0, 0, 0);
+                    const valLines = doc.splitTextToSize(value, 130);
+                    doc.text(valLines, 55, y);
+                    y += (valLines.length * 5) + 3;
+                    rowIndex++;
+                };
+
                 if (formData.technical.consoles && formData.technical.consoles.length > 0) {
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Régie :', 20, y);
-                    doc.setFont('helvetica', 'normal');
-                    doc.text(`Une console numérique et son patch numérique ou analogique.`, 20, y + 5);
                     const consolesText = formData.technical.consoles.map(c => c.name).join(', ');
-                    doc.text(`Préférences pour ${consolesText}.`, 20, y + 10);
-                    y += 20;
+                    drawTechRow('Régie :', `Console numérique avec patch. Préférences : ${consolesText}.`);
                 }
-                
+
                 if (formData.technical.speakerSystems && formData.technical.speakerSystems.length > 0) {
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Diffusion :', 20, y);
-                    doc.setFont('helvetica', 'normal');
                     const systemsText = formData.technical.speakerSystems.join(', ');
-                    const lines = doc.splitTextToSize(`Un système de diffusion adapté au lieu (Type : ${systemsText}), égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l'arrivée du groupe.`, 170);
-                    doc.text(lines, 20, y + 5);
-                    y += (lines.length * 5) + 10;
+                    drawTechRow('Diffusion :', `Système adapté au lieu (Type : ${systemsText}), égalisé et en phase, installé et prêt à l'arrivée du groupe.`);
                 }
-                
+
                 if (formData.technical.monitorSystems && formData.technical.monitorSystems.length > 0) {
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Retours :', 20, y);
-                    doc.setFont('helvetica', 'normal');
                     const monitorsText = formData.technical.monitorSystems.join(', ');
-                    doc.text(`Préférences pour ${monitorsText}.`, 20, y + 5);
-                    y += 15;
+                    drawTechRow('Retours :', `Préférences : ${monitorsText}.`);
                 }
-                
+
                 if (formData.technical.effects && formData.technical.effects.length > 0) {
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Effets souhaités :', 20, y);
-                    doc.setFont('helvetica', 'normal');
-                    doc.text(formData.technical.effects.join(', '), 20, y + 5);
-                    y += 15;
+                    drawTechRow('Effets souhaités :', formData.technical.effects.join(', '));
                 }
             }
-            
+
             // LISTE QUANTITATIVE DES MICROS ET PIEDS
             const { micCount, standCount } = countMicsAndStands();
-            
+
             y += 10;
-            doc.setFontSize(16);
-            doc.text('MICROPHONIE ET SUPPORTS', 20, y);
-            y += 10;
-            
+            // Barre de titre dorée
+            doc.setGState(new doc.GState({opacity: 0.85}));
+            doc.setFillColor(222, 173, 57);
+            doc.rect(20, y - 6, 170, 9, 'F');
+            doc.setGState(new doc.GState({opacity: 1.0}));
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(255, 255, 255);
+            doc.text('MICROPHONIE ET SUPPORTS', 25, y);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'normal');
+            y += 8;
+
             doc.setFontSize(9);
-            for (const [mic, count] of Object.entries(micCount).sort()) {
-                if (y > 265) {
-                    // Si on dépasse, on continue sur la même page en réduisant l'espace
-                    y = 265;
-                    break;
+            let micRowIndex = 0;
+            const allItems = [
+                ...Object.entries(micCount).sort().map(([k, v]) => ({ label: k, count: v })),
+                ...Object.entries(standCount).sort().map(([k, v]) => ({ label: k, count: v })),
+                ...(patchList.length > 0 ? [{ label: 'Câble XLR', count: patchList.length }] : [])
+            ];
+            for (const item of allItems) {
+                if (y > 265) break;
+                if (micRowIndex % 2 === 0) {
+                    doc.setFillColor(245, 245, 245);
+                    doc.rect(20, y - 4, 170, 6, 'F');
                 }
-                doc.text(`- ${count} ${mic}${count > 1 ? 's' : ''}`, 20, y);
-                y += 5;
-            }
-            
-            // Pieds
-            y += 5;
-            for (const [stand, count] of Object.entries(standCount).sort()) {
-                if (y > 270) break;
-                doc.text(`- ${count} ${stand}${count > 1 ? 's' : ''}`, 20, y);
-                y += 5;
-            }
-            
-            // Câbles XLR
-            if (y < 270) {
-                doc.text(`- ${patchList.length} Câbles XLR`, 20, y);
+                // Pastille de couleur à gauche
+                doc.setFillColor(222, 173, 57);
+                doc.rect(22, y - 3, 2, 4, 'F');
+                doc.setTextColor(0, 0, 0);
+                doc.text(`${item.count}x`, 27, y);
+                doc.text(`${item.label}${item.count > 1 ? 's' : ''}`, 40, y);
+                y += 6;
+                micRowIndex++;
             }
             
             // Demandes spéciales
