@@ -2528,6 +2528,7 @@
             // Sauvegarder pour disposition-scenique.html
             localStorage.setItem('patchList', JSON.stringify(patchList));
             localStorage.setItem('returnsList', JSON.stringify(returnsList));
+            localStorage.setItem('ficheData', JSON.stringify(formData));
 
             // Initialiser le drag & drop
             initSortable();
@@ -2536,6 +2537,7 @@
         function openDispositionScenice() {
             localStorage.setItem('patchList', JSON.stringify(patchList));
             localStorage.setItem('returnsList', JSON.stringify(returnsList));
+            localStorage.setItem('ficheData', JSON.stringify(formData));
             window.open('disposition-scenique.html', '_blank');
         }
         
