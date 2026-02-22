@@ -4183,8 +4183,8 @@
             y += 6;
             doc.text(`Nombre de musiciens : ${formData.numMusicians}`, 20, y);
             
-            // Configuration Technique
-            if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.effects.length > 0 || formData.technical.speakerSystems.length > 0 || formData.technical.monitorSystems.length > 0)) {
+            // Configuration Technique - toujours affichée avec phrases génériques
+            {
                 y += 15;
                 // Barre de titre dorée
                 doc.setGState(new doc.GState({opacity: 0.85}));
@@ -4217,22 +4217,35 @@
                     rowIndex++;
                 };
 
-                if (formData.technical.consoles && formData.technical.consoles.length > 0) {
+                // Régie : générique ou avec préférences si sélectionnées
+                const hasConsoles = formData.technical && formData.technical.consoles && formData.technical.consoles.length > 0;
+                if (hasConsoles) {
                     const consolesText = formData.technical.consoles.map(c => c.name).join(', ');
                     drawTechRow('Régie :', `Une console numérique et son patch numérique ou analogique. Préférences pour ${consolesText}.`);
+                } else {
+                    drawTechRow('Régie :', 'Une console numérique et son patch numérique ou analogique.');
                 }
 
-                if (formData.technical.speakerSystems && formData.technical.speakerSystems.length > 0) {
+                // Diffusion : générique ou avec type si sélectionné
+                const hasSpeakers = formData.technical && formData.technical.speakerSystems && formData.technical.speakerSystems.length > 0;
+                if (hasSpeakers) {
                     const systemsText = formData.technical.speakerSystems.join(', ');
                     drawTechRow('Diffusion :', `Un système de diffusion adapté au lieu (Type : ${systemsText}), égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l'arrivée du groupe.`);
+                } else {
+                    drawTechRow('Diffusion :', `Un système de diffusion adapté au lieu, égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l'arrivée du groupe.`);
                 }
 
-                if (formData.technical.monitorSystems && formData.technical.monitorSystems.length > 0) {
+                // Retours : générique ou avec préférences si sélectionnées
+                const hasMonitors = formData.technical && formData.technical.monitorSystems && formData.technical.monitorSystems.length > 0;
+                if (hasMonitors) {
                     const monitorsText = formData.technical.monitorSystems.join(', ');
-                    drawTechRow('Retours :', `Préférences : ${monitorsText}.`);
+                    drawTechRow('Retours :', `Des retours de scène adaptés, un par musicien minimum. Préférences : ${monitorsText}.`);
+                } else {
+                    drawTechRow('Retours :', 'Des retours de scène adaptés, un par musicien minimum.');
                 }
 
-                if (formData.technical.effects && formData.technical.effects.length > 0) {
+                // Effets : uniquement si sélectionnés
+                if (formData.technical && formData.technical.effects && formData.technical.effects.length > 0) {
                     drawTechRow('Effets souhaités :', formData.technical.effects.join(', '));
                 }
             }
