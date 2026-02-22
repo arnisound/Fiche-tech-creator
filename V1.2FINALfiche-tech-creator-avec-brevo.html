@@ -4295,52 +4295,30 @@
             ];
 
             const MIC_ROW_H = 6;
-            const MIC_PAGE_LIMIT = 265;
             const micStartY = y;
-            const maxPerMicCol = Math.floor((MIC_PAGE_LIMIT - micStartY) / MIC_ROW_H);
-            const micNeedsTwoCol = allItems.length > maxPerMicCol;
 
-            if (micNeedsTwoCol) {
-                // Layout 2 colonnes (COL1 : x=20, COL2 : x=108, chacune 82mm)
-                let col1Y = micStartY;
-                let col2Y = micStartY;
-                allItems.forEach((item, idx) => {
-                    let sx, sy, colIdx;
-                    if (idx < maxPerMicCol) {
-                        sx = 20; sy = col1Y; colIdx = idx; col1Y += MIC_ROW_H;
-                    } else if (idx < maxPerMicCol * 2) {
-                        sx = 108; sy = col2Y; colIdx = idx - maxPerMicCol; col2Y += MIC_ROW_H;
-                    } else {
-                        return; // dépasse 2 colonnes (cas très rare)
-                    }
-                    if (colIdx % 2 === 0) {
-                        doc.setFillColor(245, 245, 245);
-                        doc.rect(sx, sy - 4, 82, 6, 'F');
-                    }
-                    doc.setFillColor(222, 173, 57);
-                    doc.rect(sx + 2, sy - 3, 2, 4, 'F');
-                    doc.setTextColor(0, 0, 0);
-                    doc.text(`${item.count}x`, sx + 7, sy);
-                    doc.text(item.noPlural ? item.label : `${item.label}${item.count > 1 ? 's' : ''}`, sx + 20, sy);
-                });
-                y = Math.max(col1Y, col2Y);
-            } else {
-                // Layout 1 colonne (comportement existant)
-                let micRowIndex = 0;
-                for (const item of allItems) {
-                    if (micRowIndex % 2 === 0) {
-                        doc.setFillColor(245, 245, 245);
-                        doc.rect(20, y - 4, 170, 6, 'F');
-                    }
-                    doc.setFillColor(222, 173, 57);
-                    doc.rect(22, y - 3, 2, 4, 'F');
-                    doc.setTextColor(0, 0, 0);
-                    doc.text(`${item.count}x`, 27, y);
-                    doc.text(item.noPlural ? item.label : `${item.label}${item.count > 1 ? 's' : ''}`, 40, y);
-                    y += MIC_ROW_H;
-                    micRowIndex++;
+            // Layout toujours en 2 colonnes (COL1 : x=20, COL2 : x=108, chacune 82mm)
+            const halfCount = Math.ceil(allItems.length / 2);
+            let col1Y = micStartY;
+            let col2Y = micStartY;
+            allItems.forEach((item, idx) => {
+                let sx, sy, colIdx;
+                if (idx < halfCount) {
+                    sx = 20; sy = col1Y; colIdx = idx; col1Y += MIC_ROW_H;
+                } else {
+                    sx = 108; sy = col2Y; colIdx = idx - halfCount; col2Y += MIC_ROW_H;
                 }
-            }
+                if (colIdx % 2 === 0) {
+                    doc.setFillColor(245, 245, 245);
+                    doc.rect(sx, sy - 4, 82, 6, 'F');
+                }
+                doc.setFillColor(222, 173, 57);
+                doc.rect(sx + 2, sy - 3, 2, 4, 'F');
+                doc.setTextColor(0, 0, 0);
+                doc.text(`${item.count}x`, sx + 7, sy);
+                doc.text(item.noPlural ? item.label : `${item.label}${item.count > 1 ? 's' : ''}`, sx + 20, sy);
+            });
+            y = Math.max(col1Y, col2Y);
             
             // Demandes spéciales
             if (formData.specialRequests) {
