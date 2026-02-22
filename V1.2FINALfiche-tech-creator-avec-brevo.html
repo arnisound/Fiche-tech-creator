@@ -4306,118 +4306,171 @@
             // PAGE 2 - Patch Lists
             doc.addPage();
             createHeader(2, 2);
-            
-            // Patch List Face
-            y = 55;
-            doc.setFontSize(14);
-            doc.setTextColor(0, 0, 0);
-            doc.text('PATCH LIST FACE', 20, y);
-            
-            y += 8;
-            doc.setFontSize(8);
-            doc.setGState(new doc.GState({opacity: 0.7}));  // Opacité 70%
-            doc.setFillColor(0, 0, 0);  // NOIR
-            doc.rect(20, y - 5, 170, 7, 'F');
-            doc.setGState(new doc.GState({opacity: 1.0}));  // Remettre opacité à 100%
-            doc.setTextColor(255, 255, 255);
-            doc.text('CH', 25, y);
-            doc.text('INSTRUMENT', 40, y);
-            doc.text('MICROPHONE', 100, y);
-            doc.text('PIED', 150, y);
-            
-            y += 7;
-            doc.setTextColor(0, 0, 0);
-            
-            patchList.forEach((item, index) => {
-                // Fond gris léger pour les lignes paires
-                if (index % 2 === 0) {
-                    doc.setFillColor(240, 240, 240);
-                    doc.rect(20, y - 4, 170, 5, 'F');
-                }
-                
-                // Ajouter liserés colorés devant chaque colonne
-                if (item.color) {
-                    const hexColor = item.color.replace('#', '');
-                    const r = parseInt(hexColor.substr(0, 2), 16);
-                    const g = parseInt(hexColor.substr(2, 2), 16);
-                    const b = parseInt(hexColor.substr(4, 2), 16);
-                    
-                    // Liseré coloré devant CH
-                    doc.setFillColor(r, g, b);
-                    doc.rect(23, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant INSTRUMENT
-                    doc.rect(38, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant MICROPHONE
-                    doc.rect(98, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant PIED
-                    doc.rect(148, y - 4, 1.5, 5, 'F');
-                }
-                
-                doc.setTextColor(0, 0, 0);
-                doc.text(item.channel.toString(), 25, y);
-                doc.text(item.instrument.substring(0, 30), 40, y);
-                doc.text(item.mic.substring(0, 25), 100, y);
-                doc.text(item.stand, 150, y);
-                y += 5;
-            });
 
-            // Patch Retours
-            y += 10;
-            doc.setFontSize(14);
-            doc.text('PATCH LIST RETOURS', 20, y);
+            // --- Helpers pour layout en colonnes avec split automatique ---
+            const PAGE_BTM = 272;
+            const ROW_H_P = 5;
+            const FULL_COL_W = 170;
+            const SPLIT_COL_W = 82;
+            const COL1_START = 20;
+            const COL2_START = 108; // 20 + 82 + 6mm de séparation
 
-            y += 8;
-            doc.setFontSize(8);
-            doc.setGState(new doc.GState({opacity: 0.7}));  // Opacité 70%
-            doc.setFillColor(0, 0, 0);  // NOIR
-            doc.rect(20, y - 5, 170, 7, 'F');
-            doc.setGState(new doc.GState({opacity: 1.0}));  // Remettre opacité à 100%
-            doc.setTextColor(255, 255, 255);
-            doc.text('AUX', 25, y);
-            doc.text('DESTINATION', 50, y);
-            doc.text('TYPE', 130, y);
+            function hexToRgb(hex) {
+                const h = hex.replace('#', '');
+                return [parseInt(h.substr(0,2),16), parseInt(h.substr(2,2),16), parseInt(h.substr(4,2),16)];
+            }
 
-            y += 7;
-            doc.setTextColor(0, 0, 0);
-
-            returnsList.forEach((item, index) => {
-                // Fond gris léger pour les lignes paires
-                if (index % 2 === 0) {
-                    doc.setFillColor(240, 240, 240);
-                    doc.rect(20, y - 4, 170, 5, 'F');
-                }
-                
-                // Ajouter liserés colorés devant chaque colonne
-                if (item.color) {
-                    const hexColor = item.color.replace('#', '');
-                    const r = parseInt(hexColor.substr(0, 2), 16);
-                    const g = parseInt(hexColor.substr(2, 2), 16);
-                    const b = parseInt(hexColor.substr(4, 2), 16);
-                    
-                    // Liseré coloré devant AUX
-                    doc.setFillColor(r, g, b);
-                    doc.rect(23, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant DESTINATION
-                    doc.rect(48, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant TYPE
-                    doc.rect(128, y - 4, 1.5, 5, 'F');
-                }
-                
-                doc.setTextColor(0, 0, 0);
-                if (item.isStereo) {
-                    doc.text(`AUX ${item.aux}-${item.auxPair}`, 25, y);
+            function drawFaceHdr(sx, w, yh) {
+                doc.setFontSize(8);
+                doc.setGState(new doc.GState({opacity: 0.7}));
+                doc.setFillColor(0, 0, 0);
+                doc.rect(sx, yh - 5, w, 7, 'F');
+                doc.setGState(new doc.GState({opacity: 1.0}));
+                doc.setTextColor(255, 255, 255);
+                doc.text('CH', sx + 5, yh);
+                doc.text('INSTRUMENT', sx + 20, yh);
+                if (w > 100) {
+                    doc.text('MICROPHONE', sx + 80, yh);
+                    doc.text('PIED', sx + 130, yh);
                 } else {
-                    doc.text(`AUX ${item.aux}`, 25, y);
+                    doc.text('MIC', sx + 48, yh);
+                    doc.text('PIED', sx + 68, yh);
                 }
-                doc.text(item.destination, 50, y);
-                doc.text(item.type, 130, y);
-                y += 5;
-            });
+            }
+
+            function drawFaceRowFn(item, rowIdx, sx, w, yp) {
+                if (rowIdx % 2 === 0) {
+                    doc.setFillColor(240, 240, 240);
+                    doc.rect(sx, yp - 4, w, 5, 'F');
+                }
+                if (item.color) {
+                    const [r,g,b] = hexToRgb(item.color);
+                    doc.setFillColor(r, g, b);
+                    doc.rect(sx + 3, yp - 4, 1.5, 5, 'F');
+                    doc.rect(sx + 18, yp - 4, 1.5, 5, 'F');
+                    if (w > 100) {
+                        doc.rect(sx + 78, yp - 4, 1.5, 5, 'F');
+                        doc.rect(sx + 128, yp - 4, 1.5, 5, 'F');
+                    } else {
+                        doc.rect(sx + 46, yp - 4, 1.5, 5, 'F');
+                        doc.rect(sx + 66, yp - 4, 1.5, 5, 'F');
+                    }
+                }
+                doc.setTextColor(0, 0, 0);
+                doc.text(item.channel.toString(), sx + 5, yp);
+                if (w > 100) {
+                    doc.text(item.instrument.substring(0, 30), sx + 20, yp);
+                    doc.text(item.mic.substring(0, 25), sx + 80, yp);
+                    doc.text(item.stand, sx + 130, yp);
+                } else {
+                    doc.text(item.instrument.substring(0, 13), sx + 20, yp);
+                    doc.text(item.mic.substring(0, 10), sx + 48, yp);
+                    doc.text(item.stand.substring(0, 5), sx + 68, yp);
+                }
+            }
+
+            function drawRetHdr(sx, w, yh) {
+                doc.setFontSize(8);
+                doc.setGState(new doc.GState({opacity: 0.7}));
+                doc.setFillColor(0, 0, 0);
+                doc.rect(sx, yh - 5, w, 7, 'F');
+                doc.setGState(new doc.GState({opacity: 1.0}));
+                doc.setTextColor(255, 255, 255);
+                doc.text('AUX', sx + 5, yh);
+                if (w > 100) {
+                    doc.text('DESTINATION', sx + 30, yh);
+                    doc.text('TYPE', sx + 110, yh);
+                } else {
+                    doc.text('DESTINATION', sx + 28, yh);
+                    doc.text('TYPE', sx + 58, yh);
+                }
+            }
+
+            function drawRetRowFn(item, rowIdx, sx, w, yp) {
+                if (rowIdx % 2 === 0) {
+                    doc.setFillColor(240, 240, 240);
+                    doc.rect(sx, yp - 4, w, 5, 'F');
+                }
+                if (item.color) {
+                    const [r,g,b] = hexToRgb(item.color);
+                    doc.setFillColor(r, g, b);
+                    doc.rect(sx + 3, yp - 4, 1.5, 5, 'F');
+                    if (w > 100) {
+                        doc.rect(sx + 28, yp - 4, 1.5, 5, 'F');
+                        doc.rect(sx + 108, yp - 4, 1.5, 5, 'F');
+                    } else {
+                        doc.rect(sx + 26, yp - 4, 1.5, 5, 'F');
+                        doc.rect(sx + 56, yp - 4, 1.5, 5, 'F');
+                    }
+                }
+                doc.setTextColor(0, 0, 0);
+                const auxTxt = item.isStereo ? `AUX ${item.aux}-${item.auxPair}` : `AUX ${item.aux}`;
+                doc.text(auxTxt, sx + 5, yp);
+                if (w > 100) {
+                    doc.text(item.destination, sx + 30, yp);
+                    doc.text(item.type, sx + 110, yp);
+                } else {
+                    doc.text(item.destination.substring(0, 13), sx + 28, yp);
+                    doc.text(item.type.substring(0, 10), sx + 58, yp);
+                }
+            }
+
+            // Dessine un tableau avec split en 2 colonnes si nécessaire
+            // Retourne la position y finale après le tableau
+            function drawSplittableTable(items, hdrFn, rowFn, titleTxt, titleY) {
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text(titleTxt, COL1_START, titleY);
+
+                const hdrY = titleY + 8;
+                const rowsY0 = hdrY + 7;
+                const maxRows = Math.floor((PAGE_BTM - rowsY0) / ROW_H_P);
+                const needsSplit = items.length > maxRows;
+
+                if (needsSplit) {
+                    // Dessiner les en-têtes des 2 colonnes
+                    hdrFn(COL1_START, SPLIT_COL_W, hdrY);
+                    hdrFn(COL2_START, SPLIT_COL_W, hdrY);
+                    // Ligne de séparation verticale entre les 2 colonnes
+                    doc.setDrawColor(200, 200, 200);
+                    doc.setLineWidth(0.3);
+                    doc.line(COL2_START - 3, rowsY0 - 6, COL2_START - 3, Math.min(rowsY0 + maxRows * ROW_H_P, PAGE_BTM));
+
+                    let lY = rowsY0, rY = rowsY0;
+                    items.forEach((item, idx) => {
+                        if (idx < maxRows) {
+                            rowFn(item, idx, COL1_START, SPLIT_COL_W, lY);
+                            lY += ROW_H_P;
+                        } else if (idx < maxRows * 2) {
+                            rowFn(item, idx, COL2_START, SPLIT_COL_W, rY);
+                            rY += ROW_H_P;
+                        }
+                        // Au-delà de 2 colonnes : ignoré (nécessiterait une 3e page)
+                    });
+                    return Math.max(lY, rY);
+                } else {
+                    hdrFn(COL1_START, FULL_COL_W, hdrY);
+                    let rowY = rowsY0;
+                    items.forEach((item, idx) => {
+                        rowFn(item, idx, COL1_START, FULL_COL_W, rowY);
+                        rowY += ROW_H_P;
+                    });
+                    return rowY;
+                }
+            }
+
+            // Patch List Face
+            const faceEndY = drawSplittableTable(patchList, drawFaceHdr, drawFaceRowFn, 'PATCH LIST FACE', 55);
+
+            // Patch List Retours - vérifier si assez de place, sinon nouvelle page
+            y = faceEndY + 10;
+            const MIN_RET_H = 22 + 2 * ROW_H_P; // titre + en-tête + 2 lignes minimum
+            if (y + MIN_RET_H > PAGE_BTM) {
+                doc.addPage();
+                createHeader(doc.internal.getNumberOfPages(), doc.internal.getNumberOfPages());
+                y = 55;
+            }
+            drawSplittableTable(returnsList, drawRetHdr, drawRetRowFn, 'PATCH LIST RETOURS', y);
             
             // Footer pour toutes les pages
             const pageCount = doc.internal.getNumberOfPages();
