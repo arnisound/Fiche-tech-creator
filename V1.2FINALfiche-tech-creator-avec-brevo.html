@@ -294,8 +294,32 @@
         
         .buttons {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 12px;
             margin-top: 30px;
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-continue--full {
+            width: 100%;
+            flex: none;
+        }
+
+        .patch-label {
+            color: #aaa;
+            font-size: 0.9em;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .buttons-row--secondary button {
+            flex: 1;
         }
         
         button {
@@ -590,8 +614,12 @@
                 grid-template-columns: 1fr;
             }
             
-            .buttons {
+            .buttons-row {
                 flex-direction: column;
+            }
+
+            .patch-label {
+                display: none;
             }
             
             .patch-row {
@@ -1860,10 +1888,17 @@
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn-primary" onclick="downloadPDF()">📥 Télécharger PDF</button>
-                    <button class="btn-success" onclick="exportExcel()">📊 Exporter Excel</button>
-                    <button class="btn-continue" onclick="openDispositionScenice()">🎯 Continuer vers une fiche technique complète</button>
-                    <button class="btn-secondary" onclick="restart()">🔄 Nouvelle fiche</button>
+                    <!-- Ligne 1 : bouton principal pleine largeur -->
+                    <div class="buttons-row buttons-row--main">
+                        <button class="btn-continue btn-continue--full" onclick="openDispositionScenice()">🎯 Continuer vers une fiche technique complète avec plan de scène</button>
+                    </div>
+                    <!-- Ligne 2 : label + boutons patch list -->
+                    <div class="buttons-row buttons-row--secondary">
+                        <span class="patch-label">Récupérer la patch list :</span>
+                        <button class="btn-primary" onclick="downloadPDF()">📥 Télécharger PDF</button>
+                        <button class="btn-success" onclick="exportExcel()">📊 Exporter Excel</button>
+                        <button class="btn-secondary" onclick="restart()">🔄 Nouvelle fiche</button>
+                    </div>
                 </div>
             </div>
         </div>
