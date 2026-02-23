@@ -28656,10 +28656,10 @@
         // GÉNÉRATION FICHE TECHNIQUE COMPLÈTE (fiche tech + plan de scène)
         // =====================================================================
 
-        function generateCompleteSheet() {
+        function generateCompleteSheet(returnBlob) {
             if (!window.jspdf) {
                 alert('La bibliothèque PDF n\'est pas encore chargée. Attendez quelques secondes et réessayez.');
-                return;
+                return null;
             }
             const { jsPDF } = window.jspdf;
 
@@ -28965,6 +28965,9 @@
             }
 
             addFooters();
+            if (returnBlob) {
+                return doc.output('blob');
+            }
             doc.save('FicheTechComplete_' + groupName.replace(/\s+/g, '_') + '.pdf');
         }
 
@@ -29097,31 +29100,65 @@
             var ficheData = JSON.parse(localStorage.getItem('ficheData') || '{}');
             var groupName = (ficheData && ficheData.groupName) ? ficheData.groupName : 'Groupe';
             var messageText = 'Fiche technique audio \u2013 ' + groupName;
-            var encoded = encodeURIComponent(messageText);
+            var fileName = 'FicheTechComplete_' + groupName.replace(/\s+/g, '_') + '.pdf';
 
-            // Générer et télécharger le PDF
-            generateCompleteSheet();
+            // Générer le PDF sous forme de blob
+            var pdfBlob = generateCompleteSheet(true);
+            if (!pdfBlob) return;
 
-            // Ouvrir la plateforme après un court délai
-            setTimeout(function() {
-                switch (platform) {
-                    case 'whatsapp':
-                        window.open('https://api.whatsapp.com/send?text=' + encoded, '_blank');
-                        break;
-                    case 'telegram':
-                        window.open('https://t.me/share/url?url=&text=' + encoded, '_blank');
-                        break;
-                    case 'messenger':
-                        window.open('https://www.messenger.com/', '_blank');
-                        break;
-                    case 'mail':
-                        var body = encodeURIComponent(
-                            'Bonjour,\n\nVeuillez trouver ci-joint la fiche technique audio de ' + groupName + '.\n\nLe fichier PDF a été téléchargé sur votre appareil.\n\nCordialement'
-                        );
-                        window.location.href = 'mailto:?subject=' + encoded + '&body=' + body;
-                        break;
-                }
-            }, 600);
+            var pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+            // Utiliser le Web Share API avec pièce jointe si disponible (mobile)
+            if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+                navigator.share({
+                    title: messageText,
+                    text: 'Bonjour,\n\nVeuillez trouver ci-joint la fiche technique audio de ' + groupName + '.\n\nCordialement',
+                    files: [pdfFile]
+                }).catch(function(err) {
+                    if (err.name !== 'AbortError') {
+                        // En cas d'erreur inattendue, télécharger le PDF
+                        var url = URL.createObjectURL(pdfBlob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }
+                });
+            } else {
+                // Fallback : télécharger le PDF puis ouvrir la plateforme
+                var url = URL.createObjectURL(pdfBlob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                var encoded = encodeURIComponent(messageText);
+                setTimeout(function() {
+                    switch (platform) {
+                        case 'whatsapp':
+                            window.open('https://api.whatsapp.com/send?text=' + encoded, '_blank');
+                            break;
+                        case 'telegram':
+                            window.open('https://t.me/share/url?url=&text=' + encoded, '_blank');
+                            break;
+                        case 'messenger':
+                            window.open('https://www.messenger.com/', '_blank');
+                            break;
+                        case 'mail':
+                            var body = encodeURIComponent(
+                                'Bonjour,\n\nVeuillez trouver ci-joint la fiche technique audio de ' + groupName + '.\n\nLe fichier PDF a \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9 sur votre appareil.\n\nCordialement'
+                            );
+                            window.location.href = 'mailto:?subject=' + encoded + '&body=' + body;
+                            break;
+                    }
+                }, 600);
+            }
         }
 
         // Câblage des boutons de la barre d'action en bas
