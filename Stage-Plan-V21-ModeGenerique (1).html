@@ -16204,7 +16204,36 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             stagePlan = new StagePlanCanvas();
-            
+
+            // Créer le groupe "Basique" au sommet de la palette (clones des éléments existants)
+            (function() {
+                const basiqueSectionTypes = [
+                    'WEDGE', 'SIDE_L', 'SIDE_R', 'MIXETTE', 'IEM',
+                    'TABOURET', 'AMPLI_BASSE', 'AMPLI_GUITARE', 'PEDALBOARD',
+                    'BATTERIE', 'GUITARE_ELECTRIQUE', 'GUITARE_ACOUSTIQUE', 'BASSE', 'PIANO'
+                ];
+                const elementsPalette = document.querySelector('.elements-palette');
+                if (elementsPalette) {
+                    const basiqueSection = document.createElement('div');
+                    basiqueSection.className = 'palette-section';
+                    basiqueSection.innerHTML = '<h3>⭐ Basique</h3><div class="palette-items"></div>';
+                    const basiqueItems = basiqueSection.querySelector('.palette-items');
+                    basiqueSectionTypes.forEach(type => {
+                        const original = document.querySelector(`.element-item[data-type="${type}"]`);
+                        if (original) {
+                            const clone = original.cloneNode(true);
+                            basiqueItems.appendChild(clone);
+                        }
+                    });
+                    elementsPalette.insertBefore(basiqueSection, elementsPalette.firstChild);
+                    // Ajouter le listener collapsible pour cette section
+                    const h3 = basiqueSection.querySelector('h3');
+                    h3.addEventListener('click', () => {
+                        basiqueSection.classList.toggle('collapsed');
+                    });
+                }
+            })();
+
             // CONVERTIR LES SVG TEXTE EN IMAGES VISIBLES dans la palette
             console.log('🎨 Loading palette SVG icons...');
             const iconDivs = document.querySelectorAll('.element-icon');
