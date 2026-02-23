@@ -548,6 +548,46 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ---- Section besoins électriques ---- */
+        .power-section {
+            margin-bottom: 40px;
+        }
+        .power-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .power-table thead {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        }
+        .power-table th {
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #ffd700;
+            border: 1px solid #444;
+            font-size: 14px;
+        }
+        .power-table td {
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            background: white;
+        }
+        .power-table tbody tr:hover { background: #f8f9fa; }
+        .power-group-label {
+            text-align: left;
+            padding-left: 15px;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+        }
+        .power-checkbox-cell input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #c19a3e;
+        }
     </style>
 </head>
 <body>
@@ -648,6 +688,25 @@
                     </div>
 
                     <button class="btn-add-group" onclick="addCustomGroup()">+ Ajouter un groupe personnalisé</button>
+                </div>
+
+                <!-- Tableau des besoins électriques -->
+                <div id="powerSection" class="power-section" style="display: none;">
+                    <h2 class="section-title">⚡ Besoins électriques</h2>
+                    <div class="table-wrapper">
+                        <table class="power-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 250px; text-align: left; padding-left: 15px;">Groupe</th>
+                                    <th style="width: 140px;">230V / 16A</th>
+                                    <th style="width: 140px;">110V / 20A</th>
+                                </tr>
+                            </thead>
+                            <tbody id="powerTableBody">
+                                <!-- Rempli dynamiquement -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <!-- Tableau de scène 7x5 -->
@@ -923,6 +982,8 @@
 
                 tbody.appendChild(row);
             });
+
+            buildPowerTable();
         }
 
         // Gérer le changement de checkbox
@@ -1017,6 +1078,68 @@
                 checkCell.appendChild(checkbox);
                 row.appendChild(checkCell);
             });
+
+            buildPowerTable();
+        }
+
+        // ============================================================
+        // TABLEAU DES BESOINS ÉLECTRIQUES
+        // ============================================================
+        function buildPowerTable() {
+            const tbody = document.getElementById('powerTableBody');
+            if (!tbody) return;
+
+            // Sauvegarder les sélections existantes
+            const previousSelections = {};
+            Array.from(tbody.querySelectorAll('tr')).forEach(row => {
+                const groupId = row.dataset.groupId;
+                if (!groupId) return;
+                previousSelections[groupId] = [];
+                row.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+                    previousSelections[groupId].push(cb.dataset.voltage);
+                });
+            });
+
+            tbody.innerHTML = '';
+
+            groupColumns.forEach(groupId => {
+                const row = document.createElement('tr');
+                row.dataset.groupId = groupId;
+
+                // Colonne 1 : couleur + icône + nom
+                const labelCell = document.createElement('td');
+                labelCell.className = 'power-group-label';
+                const color = groupColors[groupId] || '#888888';
+                labelCell.innerHTML = `<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${color};margin-right:6px;vertical-align:middle;"></span>${groupIcons[groupId] || ''} ${groupNames[groupId] || groupId}`;
+                row.appendChild(labelCell);
+
+                // Colonne 2 : 230V / 16A
+                const cell230 = document.createElement('td');
+                cell230.className = 'power-checkbox-cell';
+                const cb230 = document.createElement('input');
+                cb230.type = 'checkbox';
+                cb230.dataset.group = groupId;
+                cb230.dataset.voltage = '230V/16A';
+                if (previousSelections[groupId] && previousSelections[groupId].includes('230V/16A')) cb230.checked = true;
+                cell230.appendChild(cb230);
+                row.appendChild(cell230);
+
+                // Colonne 3 : 110V / 20A
+                const cell110 = document.createElement('td');
+                cell110.className = 'power-checkbox-cell';
+                const cb110 = document.createElement('input');
+                cb110.type = 'checkbox';
+                cb110.dataset.group = groupId;
+                cb110.dataset.voltage = '110V/20A';
+                if (previousSelections[groupId] && previousSelections[groupId].includes('110V/20A')) cb110.checked = true;
+                cell110.appendChild(cb110);
+                row.appendChild(cell110);
+
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('powerSection').style.display =
+                groupColumns.length > 0 ? 'block' : 'none';
         }
 
         // ============================================================
@@ -1253,6 +1376,12 @@
                     if (!stageGroups[groupId]) {
                         const auxNum = groupId.startsWith('retour_') ? parseInt(groupId.replace('retour_', '')) : null;
                         const retourEntry = returnsList.find(r => r.aux === auxNum);
+                        const powerChecks = Array.from(
+                            document.querySelectorAll(
+                                `#powerTableBody input[type="checkbox"][data-group="${groupId}"]:checked`
+                            )
+                        ).map(cb => cb.dataset.voltage);
+
                         stageGroups[groupId] = {
                             tracks: [],
                             position: position,
@@ -1261,7 +1390,8 @@
                             color: groupColors[groupId] || '#888888',
                             auxNum: retourEntry ? retourEntry.aux : null,
                             auxPair: retourEntry ? retourEntry.auxPair : null,
-                            monitorType: retourEntry ? retourEntry.type : null
+                            monitorType: retourEntry ? retourEntry.type : null,
+                            powerNeeds: powerChecks
                         };
                     }
 

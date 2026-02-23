@@ -28503,7 +28503,10 @@
                 : (group.auxNum ? 'AUX ' + group.auxNum : '');
             const monitorInfo = auxLabel ? auxLabel + (group.monitorType ? ' · ' + group.monitorType : '') : '';
             const inputInfo = channels.length > 0 ? 'inputs — Ch. ' + channels.join(', ') : '';
-            const detailLines = [monitorInfo, inputInfo].filter(Boolean).join('\n');
+            const powerInfo = (group.powerNeeds && group.powerNeeds.length > 0)
+                ? '⚡ ' + group.powerNeeds[0]
+                : '';
+            const detailLines = [powerInfo, monitorInfo, inputInfo].filter(Boolean).join('\n');
 
             drawings.push({
                 type: 'text',
