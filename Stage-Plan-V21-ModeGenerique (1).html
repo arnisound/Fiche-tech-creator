@@ -28851,10 +28851,10 @@
                     });
 
                     y += 8;
-                    doc.setGState(new doc.GState({opacity: 0.85}));
+                    try { doc.setGState(new doc.GState({opacity: 0.85})); } catch(e) {}
                     doc.setFillColor(222, 173, 57);
                     doc.rect(20, y - 6, 170, 9, 'F');
-                    doc.setGState(new doc.GState({opacity: 1.0}));
+                    try { doc.setGState(new doc.GState({opacity: 1.0})); } catch(e) {}
                     doc.setFontSize(11);
                     doc.setFont('helvetica', 'bold');
                     doc.setTextColor(255, 255, 255);
@@ -29222,7 +29222,7 @@
 
         // Câblage des boutons de la barre d'action en bas
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('bottom-generate-complete').addEventListener('click', generateCompleteSheet);
+            document.getElementById('bottom-generate-complete').addEventListener('click', function() { generateCompleteSheet(); });
             document.getElementById('bottom-export-png').addEventListener('click', function() {
                 if (stagePlan) stagePlan.exportToPNG();
             });
