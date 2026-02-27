@@ -4599,10 +4599,12 @@
             // Patch List Face
             const faceEndY = drawSplittableTable(patchList, drawFaceHdr, drawFaceRowFn, 'PATCH LIST FACE', 55);
 
-            // Patch List Retours - vérifier si assez de place, sinon nouvelle page
+            // Patch List Retours - vérifier si TOUS les retours rentrent, sinon nouvelle page
             y = faceEndY + 10;
-            const MIN_RET_H = 22 + 2 * ROW_H_P; // titre + en-tête + 2 lignes minimum
-            if (y + MIN_RET_H > PAGE_BTM) {
+            const retRowsY0 = y + 15; // titre (8) + en-tête (7)
+            const retMaxRows = Math.floor((PAGE_BTM - retRowsY0) / ROW_H_P);
+            const retFits = returnsList.length <= retMaxRows * 2; // capacité max en 2 colonnes
+            if (!retFits) {
                 doc.addPage();
                 createHeader(doc.internal.getNumberOfPages(), doc.internal.getNumberOfPages());
                 y = 55;
