@@ -4183,18 +4183,17 @@
                     const item = returnsList.splice(evt.oldIndex, 1)[0];
                     returnsList.splice(evt.newIndex, 0, item);
                     
-                    // Renumeroter les AUX
-                    returnsList.forEach((item, index) => {
+                    // Renuméroter les AUX avec un compteur séquentiel
+                    let auxNum = 1;
+                    returnsList.forEach((item) => {
                         if (item.isStereo) {
-                            item.aux = (index * 2) + 1;
-                            item.auxPair = (index * 2) + 2;
+                            if (auxNum % 2 === 0) auxNum++; // Garantir numéro impair pour stéréo
+                            item.aux = auxNum;
+                            item.auxPair = auxNum + 1;
+                            auxNum += 2;
                         } else {
-                            // Compter combien de retours stéréo il y a avant
-                            let stereoBefore = 0;
-                            for (let i = 0; i < index; i++) {
-                                if (returnsList[i].isStereo) stereoBefore++;
-                            }
-                            item.aux = index + stereoBefore + 1;
+                            item.aux = auxNum++;
+                            delete item.auxPair;
                         }
                     });
                     
