@@ -8,7 +8,7 @@
 <!--
 ╔════════════════════════════════════════════════════════════════════════════╗
 ║                                                                              ║
-║                        FICHE TECH CREATOR v1.2 Beta                          ║
+║                        FICHE TECH CREATOR v2 Beta                          ║
 ║                                                                              ║
 ║  Copyright © 2025 Théo Arnisound                                            ║
 ║  Tous droits réservés                                                       ║
@@ -245,6 +245,31 @@
             color: #667eea;
             margin-bottom: 10px;
             font-size: 1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .monitoring-card h4::after {
+            content: '✏️';
+            font-size: 0.75em;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .monitoring-card h4:hover::after {
+            opacity: 1;
+        }
+        .monitoring-card h4 input.musician-name-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #667eea;
+            color: #667eea;
+            font-size: 1em;
+            font-weight: bold;
+            font-family: inherit;
+            width: 140px;
+            outline: none;
+            padding: 0 2px;
         }
 
         .monitoring-options {
@@ -294,8 +319,36 @@
         
         .buttons {
             display: flex;
-            gap: 15px;
+            flex-direction: column;
+            gap: 12px;
             margin-top: 30px;
+        }
+
+        .question-container .buttons {
+            flex-direction: row;
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-continue--full {
+            width: 100%;
+            flex: none;
+        }
+
+        .patch-label {
+            color: #aaa;
+            font-size: 0.9em;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .buttons-row--secondary button {
+            flex: 1;
         }
         
         button {
@@ -327,7 +380,27 @@
         .btn-secondary:hover {
             background: #e0e0e0;
         }
-        
+
+        .btn-continue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-size: 1.05em;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .btn-continue:active {
+            transform: translateY(-1px);
+        }
+
         .btn-success {
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
@@ -337,7 +410,7 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
         }
-        
+
         .result-container {
             display: none;
         }
@@ -570,8 +643,12 @@
                 grid-template-columns: 1fr;
             }
             
-            .buttons {
+            .buttons-row {
                 flex-direction: column;
+            }
+
+            .patch-label {
+                display: none;
             }
             
             .patch-row {
@@ -1840,9 +1917,17 @@
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn-primary" onclick="downloadPDF()">📥 Télécharger PDF</button>
-                    <button class="btn-success" onclick="exportExcel()">📊 Exporter Excel</button>
-                    <button class="btn-secondary" onclick="restart()">🔄 Nouvelle fiche</button>
+                    <!-- Ligne 1 : bouton principal pleine largeur -->
+                    <div class="buttons-row buttons-row--main">
+                        <button class="btn-continue btn-continue--full" onclick="openDispositionScenice()">🎯 Continuer vers une fiche technique complète avec plan de scène</button>
+                    </div>
+                    <!-- Ligne 2 : label + boutons patch list -->
+                    <div class="buttons-row buttons-row--secondary">
+                        <span class="patch-label">Récupérer la patch list :</span>
+                        <button class="btn-primary" onclick="downloadPDF()">📥 Télécharger PDF</button>
+                        <button class="btn-success" onclick="exportExcel()">📊 Exporter Excel</button>
+                        <button class="btn-secondary" onclick="restart()">🔄 Nouvelle fiche</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1851,7 +1936,7 @@
     <script>
         /**
          * ============================================================================
-         * FICHE TECH CREATOR v1.2 Beta
+         * FICHE TECH CREATOR v2 Beta
          * ============================================================================
          * 
          * @author    Théo Arnissolle
@@ -1891,6 +1976,7 @@
             numMusicians: 4,
             instruments: {},
             musicianMonitoring: [],
+            musicianNames: {},
             hasSide: false,
             specialRequests: '',
             technical: {
@@ -2174,8 +2260,9 @@
             for (let i = 1; i <= numMusicians; i++) {
                 const card = document.createElement('div');
                 card.className = 'monitoring-card';
+                const cardName = formData.musicianNames[i] || `Musicien ${i}`;
                 card.innerHTML = `
-                    <h4>Musicien ${i}</h4>
+                    <h4 onclick="editMusicianName(this, ${i})" title="Cliquer pour renommer">${cardName}</h4>
                     <div class="monitoring-options">
                         <label class="monitoring-option">
                             <input type="radio" name="monitor-${i}" value="wedge" checked>
@@ -2194,7 +2281,33 @@
                 grid.appendChild(card);
             }
         }
-        
+
+        function editMusicianName(h4, musicianId) {
+            if (h4.querySelector('input')) return; // déjà en cours d'édition
+            const currentName = formData.musicianNames[musicianId] || `Musicien ${musicianId}`;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'musician-name-input';
+            input.value = currentName;
+
+            const save = () => {
+                const newName = input.value.trim() || `Musicien ${musicianId}`;
+                formData.musicianNames[musicianId] = newName;
+                h4.textContent = newName;
+            };
+            input.addEventListener('blur', save);
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+                if (e.key === 'Escape') { input.value = currentName; input.blur(); }
+            });
+            input.addEventListener('click', e => e.stopPropagation());
+
+            h4.textContent = '';
+            h4.appendChild(input);
+            input.focus();
+            input.select();
+        }
+
         // Navigation entre questions
         // Fonction pour démarrer le questionnaire depuis la page d'accueil
         function demarrerQuestionnaire() {
@@ -2519,13 +2632,25 @@
             returnsList = generateReturnsList();
             checkConsoleCapacity();
             displayResults();
-            
+
             document.querySelectorAll('.question-container').forEach(q => q.classList.remove('active'));
             document.getElementById('resultContainer').classList.add('active');
             document.getElementById('progressBar').style.width = '100%';
-            
+
+            // Sauvegarder pour Stage-layout.html
+            localStorage.setItem('patchList', JSON.stringify(patchList));
+            localStorage.setItem('returnsList', JSON.stringify(returnsList));
+            localStorage.setItem('ficheData', JSON.stringify(formData));
+
             // Initialiser le drag & drop
             initSortable();
+        }
+
+        function openDispositionScenice() {
+            localStorage.setItem('patchList', JSON.stringify(patchList));
+            localStorage.setItem('returnsList', JSON.stringify(returnsList));
+            localStorage.setItem('ficheData', JSON.stringify(formData));
+            window.open('Stage-layout.html', '_blank');
         }
         
         function checkConsoleCapacity() {
@@ -3676,7 +3801,7 @@
             // Retours individuels
             formData.musicianMonitoring.forEach((monitor, index) => {
                 let type = '';
-                let musicianName = `Musicien ${monitor.musician}`;
+                let musicianName = formData.musicianNames[monitor.musician] || `Musicien ${monitor.musician}`;
                 let color = availableColors[index % availableColors.length].value;
                 
                 switch(monitor.type) {
@@ -3857,7 +3982,7 @@
                 }
                 monitoringHTML += `
                     <div class="info-row">
-                        <span class="info-label">Musicien ${monitor.musician} :</span>
+                        <span class="info-label">${formData.musicianNames[monitor.musician] || `Musicien ${monitor.musician}`} :</span>
                         <span class="info-value">${typeLabel}</span>
                     </div>
                 `;
@@ -4058,18 +4183,17 @@
                     const item = returnsList.splice(evt.oldIndex, 1)[0];
                     returnsList.splice(evt.newIndex, 0, item);
                     
-                    // Renumeroter les AUX
-                    returnsList.forEach((item, index) => {
+                    // Renuméroter les AUX avec un compteur séquentiel
+                    let auxNum = 1;
+                    returnsList.forEach((item) => {
                         if (item.isStereo) {
-                            item.aux = (index * 2) + 1;
-                            item.auxPair = (index * 2) + 2;
+                            if (auxNum % 2 === 0) auxNum++; // Garantir numéro impair pour stéréo
+                            item.aux = auxNum;
+                            item.auxPair = auxNum + 1;
+                            auxNum += 2;
                         } else {
-                            // Compter combien de retours stéréo il y a avant
-                            let stereoBefore = 0;
-                            for (let i = 0; i < index; i++) {
-                                if (returnsList[i].isStereo) stereoBefore++;
-                            }
-                            item.aux = index + stereoBefore + 1;
+                            item.aux = auxNum++;
+                            delete item.auxPair;
                         }
                     });
                     
@@ -4170,84 +4294,138 @@
             y += 6;
             doc.text(`Nombre de musiciens : ${formData.numMusicians}`, 20, y);
             
-            // Configuration Technique
-            if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.speakerSystems.length > 0)) {
+            // Configuration Technique - toujours affichée avec phrases génériques
+            {
                 y += 15;
-                doc.setFontSize(16);
-                doc.text('CONFIGURATION TECHNIQUE', 20, y);
-                
+                // Barre de titre dorée
+                doc.setGState(new doc.GState({opacity: 0.85}));
+                doc.setFillColor(222, 173, 57);
+                doc.rect(20, y - 6, 170, 9, 'F');
+                doc.setGState(new doc.GState({opacity: 1.0}));
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(255, 255, 255);
+                doc.text('CONFIGURATION TECHNIQUE', 25, y);
+                doc.setTextColor(0, 0, 0);
+
                 y += 10;
-                doc.setFontSize(10);
-                
-                if (formData.technical.consoles && formData.technical.consoles.length > 0) {
+                doc.setFontSize(9);
+
+                let rowIndex = 0;
+                const drawTechRow = (label, value) => {
+                    if (rowIndex % 2 === 0) {
+                        doc.setFillColor(245, 245, 245);
+                        doc.rect(20, y - 4, 170, 6, 'F');
+                    }
                     doc.setFont('helvetica', 'bold');
-                    doc.text('Régie :', 20, y);
+                    doc.setTextColor(80, 80, 80);
+                    doc.text(label, 22, y);
                     doc.setFont('helvetica', 'normal');
-                    doc.text(`Une console numérique et son patch numérique ou analogique.`, 20, y + 5);
+                    doc.setTextColor(0, 0, 0);
+                    const valLines = doc.splitTextToSize(value, 130);
+                    doc.text(valLines, 55, y);
+                    y += (valLines.length * 5) + 3;
+                    rowIndex++;
+                };
+
+                // Régie : générique ou avec préférences si sélectionnées
+                const hasConsoles = formData.technical && formData.technical.consoles && formData.technical.consoles.length > 0;
+                if (hasConsoles) {
                     const consolesText = formData.technical.consoles.map(c => c.name).join(', ');
-                    doc.text(`Préférences pour ${consolesText}.`, 20, y + 10);
-                    y += 20;
+                    drawTechRow('Régie :', `Une console numérique et son patch numérique ou analogique. Préférences pour ${consolesText}.`);
+                } else {
+                    drawTechRow('Régie :', 'Une console numérique et son patch numérique ou analogique.');
                 }
-                
-                if (formData.technical.speakerSystems && formData.technical.speakerSystems.length > 0) {
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Diffusion :', 20, y);
-                    doc.setFont('helvetica', 'normal');
+
+                // Diffusion : générique ou avec type si sélectionné
+                const hasSpeakers = formData.technical && formData.technical.speakerSystems && formData.technical.speakerSystems.length > 0;
+                if (hasSpeakers) {
                     const systemsText = formData.technical.speakerSystems.join(', ');
-                    const lines = doc.splitTextToSize(`Un système de diffusion adapté au lieu (Type : ${systemsText}), égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l'arrivée du groupe.`, 170);
-                    doc.text(lines, 20, y + 5);
-                    y += (lines.length * 5) + 10;
+                    drawTechRow('Diffusion :', `Un système de diffusion adapté au lieu (Type : ${systemsText}), égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l'arrivée du groupe.`);
+                } else {
+                    drawTechRow('Diffusion :', `Un système de diffusion adapté au lieu, égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l'arrivée du groupe.`);
                 }
-                
-                if (formData.technical.monitorSystems && formData.technical.monitorSystems.length > 0) {
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Retours :', 20, y);
-                    doc.setFont('helvetica', 'normal');
+
+                // Retours : générique ou avec préférences si sélectionnées
+                const hasMonitors = formData.technical && formData.technical.monitorSystems && formData.technical.monitorSystems.length > 0;
+                if (hasMonitors) {
                     const monitorsText = formData.technical.monitorSystems.join(', ');
-                    doc.text(`Préférences pour ${monitorsText}.`, 20, y + 5);
-                    y += 15;
+                    drawTechRow('Retours :', `Des retours de scène adaptés, un par musicien minimum. Préférences : ${monitorsText}.`);
+                } else {
+                    drawTechRow('Retours :', 'Des retours de scène adaptés, un par musicien minimum.');
                 }
-                
-                if (formData.technical.effects && formData.technical.effects.length > 0) {
-                    doc.setFont('helvetica', 'bold');
-                    doc.text('Effets souhaités :', 20, y);
-                    doc.setFont('helvetica', 'normal');
-                    doc.text(formData.technical.effects.join(', '), 20, y + 5);
-                    y += 15;
+
+                // Effets : uniquement si sélectionnés
+                if (formData.technical && formData.technical.effects && formData.technical.effects.length > 0) {
+                    drawTechRow('Effets souhaités :', formData.technical.effects.join(', '));
                 }
             }
-            
+
             // LISTE QUANTITATIVE DES MICROS ET PIEDS
             const { micCount, standCount } = countMicsAndStands();
-            
+
             y += 10;
-            doc.setFontSize(16);
-            doc.text('MICROPHONIE ET SUPPORTS', 20, y);
-            y += 10;
-            
+            // Barre de titre dorée
+            doc.setGState(new doc.GState({opacity: 0.85}));
+            doc.setFillColor(222, 173, 57);
+            doc.rect(20, y - 6, 170, 9, 'F');
+            doc.setGState(new doc.GState({opacity: 1.0}));
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(255, 255, 255);
+            doc.text('MICROPHONIE ET SUPPORTS', 25, y);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'normal');
+            y += 8;
+
             doc.setFontSize(9);
-            for (const [mic, count] of Object.entries(micCount).sort()) {
-                if (y > 265) {
-                    // Si on dépasse, on continue sur la même page en réduisant l'espace
-                    y = 265;
-                    break;
-                }
-                doc.text(`- ${count} ${mic}${count > 1 ? 's' : ''}`, 20, y);
-                y += 5;
-            }
-            
-            // Pieds
+            const MIC_ROW_H = 6;
+
+            // Séparer les micros et les supports en deux listes distinctes
+            const micItems = Object.entries(micCount).sort().map(([k, v]) => ({ label: k, count: v }));
+            const standItems = [
+                ...Object.entries(standCount).sort().map(([k, v]) => ({ label: k, count: v })),
+                ...(patchList.length > 0 ? [{ label: patchList.length > 1 ? 'Câbles XLR' : 'Câble XLR', count: patchList.length, noPlural: true }] : [])
+            ];
+
+            // Sous-titres des colonnes
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8);
+            doc.setTextColor(120, 120, 120);
+            doc.text('MICROPHONES', 22, y);
+            doc.text('SUPPORTS', 110, y);
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(0, 0, 0);
             y += 5;
-            for (const [stand, count] of Object.entries(standCount).sort()) {
-                if (y > 270) break;
-                doc.text(`- ${count} ${stand}${count > 1 ? 's' : ''}`, 20, y);
-                y += 5;
+
+            const micStartY = y;
+
+            // Fonction pour rendre une colonne d'items
+            function drawMicColumn(items, sx, startY) {
+                let colY = startY;
+                items.forEach((item, idx) => {
+                    if (idx % 2 === 0) {
+                        doc.setFillColor(245, 245, 245);
+                        doc.rect(sx, colY - 4, 82, 6, 'F');
+                    }
+                    doc.setFillColor(222, 173, 57);
+                    doc.rect(sx + 2, colY - 3, 2, 4, 'F');
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(`${item.count}x`, sx + 7, colY);
+                    doc.text(item.noPlural ? item.label : `${item.label}${item.count > 1 ? 's' : ''}`, sx + 20, colY);
+                    colY += MIC_ROW_H;
+                });
+                return colY;
             }
-            
-            // Câbles XLR
-            if (y < 270) {
-                doc.text(`- ${patchList.length} Câbles XLR`, 20, y);
-            }
+
+            // Colonne gauche : Microphones (x=20)
+            const col1EndY = drawMicColumn(micItems, 20, micStartY);
+
+            // Colonne droite : Supports + Câbles XLR (x=108)
+            const col2EndY = drawMicColumn(standItems, 108, micStartY);
+
+            y = Math.max(col1EndY, col2EndY);
             
             // Demandes spéciales
             if (formData.specialRequests) {
@@ -4265,118 +4443,173 @@
             // PAGE 2 - Patch Lists
             doc.addPage();
             createHeader(2, 2);
-            
-            // Patch List Face
-            y = 55;
-            doc.setFontSize(14);
-            doc.setTextColor(0, 0, 0);
-            doc.text('PATCH LIST FACE', 20, y);
-            
-            y += 8;
-            doc.setFontSize(8);
-            doc.setGState(new doc.GState({opacity: 0.7}));  // Opacité 70%
-            doc.setFillColor(0, 0, 0);  // NOIR
-            doc.rect(20, y - 5, 170, 7, 'F');
-            doc.setGState(new doc.GState({opacity: 1.0}));  // Remettre opacité à 100%
-            doc.setTextColor(255, 255, 255);
-            doc.text('CH', 25, y);
-            doc.text('INSTRUMENT', 40, y);
-            doc.text('MICROPHONE', 100, y);
-            doc.text('PIED', 150, y);
-            
-            y += 7;
-            doc.setTextColor(0, 0, 0);
-            
-            patchList.forEach((item, index) => {
-                // Fond gris léger pour les lignes paires
-                if (index % 2 === 0) {
-                    doc.setFillColor(240, 240, 240);
-                    doc.rect(20, y - 4, 170, 5, 'F');
-                }
-                
-                // Ajouter liserés colorés devant chaque colonne
-                if (item.color) {
-                    const hexColor = item.color.replace('#', '');
-                    const r = parseInt(hexColor.substr(0, 2), 16);
-                    const g = parseInt(hexColor.substr(2, 2), 16);
-                    const b = parseInt(hexColor.substr(4, 2), 16);
-                    
-                    // Liseré coloré devant CH
-                    doc.setFillColor(r, g, b);
-                    doc.rect(23, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant INSTRUMENT
-                    doc.rect(38, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant MICROPHONE
-                    doc.rect(98, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant PIED
-                    doc.rect(148, y - 4, 1.5, 5, 'F');
-                }
-                
-                doc.setTextColor(0, 0, 0);
-                doc.text(item.channel.toString(), 25, y);
-                doc.text(item.instrument.substring(0, 30), 40, y);
-                doc.text(item.mic.substring(0, 25), 100, y);
-                doc.text(item.stand, 150, y);
-                y += 5;
-            });
 
-            // Patch Retours
-            y += 10;
-            doc.setFontSize(14);
-            doc.text('PATCH LIST RETOURS', 20, y);
+            // --- Helpers pour layout en colonnes avec split automatique ---
+            const PAGE_BTM = 272;
+            const ROW_H_P = 5;
+            const FULL_COL_W = 170;
+            const SPLIT_COL_W = 82;
+            const COL1_START = 20;
+            const COL2_START = 108; // 20 + 82 + 6mm de séparation
 
-            y += 8;
-            doc.setFontSize(8);
-            doc.setGState(new doc.GState({opacity: 0.7}));  // Opacité 70%
-            doc.setFillColor(0, 0, 0);  // NOIR
-            doc.rect(20, y - 5, 170, 7, 'F');
-            doc.setGState(new doc.GState({opacity: 1.0}));  // Remettre opacité à 100%
-            doc.setTextColor(255, 255, 255);
-            doc.text('AUX', 25, y);
-            doc.text('DESTINATION', 50, y);
-            doc.text('TYPE', 130, y);
+            function hexToRgb(hex) {
+                const h = hex.replace('#', '');
+                return [parseInt(h.substr(0,2),16), parseInt(h.substr(2,2),16), parseInt(h.substr(4,2),16)];
+            }
 
-            y += 7;
-            doc.setTextColor(0, 0, 0);
-
-            returnsList.forEach((item, index) => {
-                // Fond gris léger pour les lignes paires
-                if (index % 2 === 0) {
-                    doc.setFillColor(240, 240, 240);
-                    doc.rect(20, y - 4, 170, 5, 'F');
-                }
-                
-                // Ajouter liserés colorés devant chaque colonne
-                if (item.color) {
-                    const hexColor = item.color.replace('#', '');
-                    const r = parseInt(hexColor.substr(0, 2), 16);
-                    const g = parseInt(hexColor.substr(2, 2), 16);
-                    const b = parseInt(hexColor.substr(4, 2), 16);
-                    
-                    // Liseré coloré devant AUX
-                    doc.setFillColor(r, g, b);
-                    doc.rect(23, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant DESTINATION
-                    doc.rect(48, y - 4, 1.5, 5, 'F');
-                    
-                    // Liseré coloré devant TYPE
-                    doc.rect(128, y - 4, 1.5, 5, 'F');
-                }
-                
-                doc.setTextColor(0, 0, 0);
-                if (item.isStereo) {
-                    doc.text(`AUX ${item.aux}-${item.auxPair}`, 25, y);
+            function drawFaceHdr(sx, w, yh) {
+                doc.setFontSize(8);
+                doc.setGState(new doc.GState({opacity: 0.7}));
+                doc.setFillColor(0, 0, 0);
+                doc.rect(sx, yh - 5, w, 7, 'F');
+                doc.setGState(new doc.GState({opacity: 1.0}));
+                doc.setTextColor(255, 255, 255);
+                doc.text('CH', sx + 5, yh);
+                doc.text('INSTRUMENT', sx + 20, yh);
+                if (w > 100) {
+                    doc.text('MICROPHONE', sx + 80, yh);
+                    doc.text('PIED', sx + 130, yh);
                 } else {
-                    doc.text(`AUX ${item.aux}`, 25, y);
+                    doc.text('MIC', sx + 48, yh);
+                    doc.text('PIED', sx + 68, yh);
                 }
-                doc.text(item.destination, 50, y);
-                doc.text(item.type, 130, y);
-                y += 5;
-            });
+            }
+
+            function drawFaceRowFn(item, rowIdx, sx, w, yp) {
+                if (rowIdx % 2 === 0) {
+                    doc.setFillColor(240, 240, 240);
+                    doc.rect(sx, yp - 4, w, 5, 'F');
+                }
+                if (item.color) {
+                    const [r,g,b] = hexToRgb(item.color);
+                    doc.setFillColor(r, g, b);
+                    doc.rect(sx + 3, yp - 4, 1.5, 5, 'F');
+                    doc.rect(sx + 18, yp - 4, 1.5, 5, 'F');
+                    if (w > 100) {
+                        doc.rect(sx + 78, yp - 4, 1.5, 5, 'F');
+                        doc.rect(sx + 128, yp - 4, 1.5, 5, 'F');
+                    } else {
+                        doc.rect(sx + 46, yp - 4, 1.5, 5, 'F');
+                        doc.rect(sx + 66, yp - 4, 1.5, 5, 'F');
+                    }
+                }
+                doc.setTextColor(0, 0, 0);
+                doc.text(item.channel.toString(), sx + 5, yp);
+                if (w > 100) {
+                    doc.text(item.instrument.substring(0, 30), sx + 20, yp);
+                    doc.text(item.mic.substring(0, 25), sx + 80, yp);
+                    doc.text(item.stand, sx + 130, yp);
+                } else {
+                    doc.text(item.instrument.substring(0, 13), sx + 20, yp);
+                    doc.text(item.mic.substring(0, 10), sx + 48, yp);
+                    doc.text(item.stand.substring(0, 5), sx + 68, yp);
+                }
+            }
+
+            function drawRetHdr(sx, w, yh) {
+                doc.setFontSize(8);
+                doc.setGState(new doc.GState({opacity: 0.7}));
+                doc.setFillColor(0, 0, 0);
+                doc.rect(sx, yh - 5, w, 7, 'F');
+                doc.setGState(new doc.GState({opacity: 1.0}));
+                doc.setTextColor(255, 255, 255);
+                doc.text('AUX', sx + 5, yh);
+                if (w > 100) {
+                    doc.text('DESTINATION', sx + 30, yh);
+                    doc.text('TYPE', sx + 110, yh);
+                } else {
+                    doc.text('DESTINATION', sx + 28, yh);
+                    doc.text('TYPE', sx + 58, yh);
+                }
+            }
+
+            function drawRetRowFn(item, rowIdx, sx, w, yp) {
+                if (rowIdx % 2 === 0) {
+                    doc.setFillColor(240, 240, 240);
+                    doc.rect(sx, yp - 4, w, 5, 'F');
+                }
+                if (item.color) {
+                    const [r,g,b] = hexToRgb(item.color);
+                    doc.setFillColor(r, g, b);
+                    doc.rect(sx + 3, yp - 4, 1.5, 5, 'F');
+                    if (w > 100) {
+                        doc.rect(sx + 28, yp - 4, 1.5, 5, 'F');
+                        doc.rect(sx + 108, yp - 4, 1.5, 5, 'F');
+                    } else {
+                        doc.rect(sx + 26, yp - 4, 1.5, 5, 'F');
+                        doc.rect(sx + 56, yp - 4, 1.5, 5, 'F');
+                    }
+                }
+                doc.setTextColor(0, 0, 0);
+                const auxTxt = item.isStereo ? `AUX ${item.aux}-${item.auxPair}` : `AUX ${item.aux}`;
+                doc.text(auxTxt, sx + 5, yp);
+                if (w > 100) {
+                    doc.text(item.destination, sx + 30, yp);
+                    doc.text(item.type, sx + 110, yp);
+                } else {
+                    doc.text(item.destination.substring(0, 13), sx + 28, yp);
+                    doc.text(item.type.substring(0, 10), sx + 58, yp);
+                }
+            }
+
+            // Dessine un tableau avec split en 2 colonnes si nécessaire
+            // Retourne la position y finale après le tableau
+            function drawSplittableTable(items, hdrFn, rowFn, titleTxt, titleY) {
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text(titleTxt, COL1_START, titleY);
+
+                const hdrY = titleY + 8;
+                const rowsY0 = hdrY + 7;
+                const maxRows = Math.floor((PAGE_BTM - rowsY0) / ROW_H_P);
+                const needsSplit = items.length > maxRows;
+
+                if (needsSplit) {
+                    // Dessiner les en-têtes des 2 colonnes
+                    hdrFn(COL1_START, SPLIT_COL_W, hdrY);
+                    hdrFn(COL2_START, SPLIT_COL_W, hdrY);
+                    // Ligne de séparation verticale entre les 2 colonnes
+                    doc.setDrawColor(200, 200, 200);
+                    doc.setLineWidth(0.3);
+                    doc.line(COL2_START - 3, rowsY0 - 6, COL2_START - 3, Math.min(rowsY0 + maxRows * ROW_H_P, PAGE_BTM));
+
+                    let lY = rowsY0, rY = rowsY0;
+                    items.forEach((item, idx) => {
+                        if (idx < maxRows) {
+                            rowFn(item, idx, COL1_START, SPLIT_COL_W, lY);
+                            lY += ROW_H_P;
+                        } else if (idx < maxRows * 2) {
+                            rowFn(item, idx, COL2_START, SPLIT_COL_W, rY);
+                            rY += ROW_H_P;
+                        }
+                        // Au-delà de 2 colonnes : ignoré (nécessiterait une 3e page)
+                    });
+                    return Math.max(lY, rY);
+                } else {
+                    hdrFn(COL1_START, FULL_COL_W, hdrY);
+                    let rowY = rowsY0;
+                    items.forEach((item, idx) => {
+                        rowFn(item, idx, COL1_START, FULL_COL_W, rowY);
+                        rowY += ROW_H_P;
+                    });
+                    return rowY;
+                }
+            }
+
+            // Patch List Face
+            const faceEndY = drawSplittableTable(patchList, drawFaceHdr, drawFaceRowFn, 'PATCH LIST FACE', 55);
+
+            // Patch List Retours - vérifier si TOUS les retours rentrent, sinon nouvelle page
+            y = faceEndY + 10;
+            const retRowsY0 = y + 15; // titre (8) + en-tête (7)
+            const retMaxRows = Math.floor((PAGE_BTM - retRowsY0) / ROW_H_P);
+            const retFits = returnsList.length <= retMaxRows * 2; // capacité max en 2 colonnes
+            if (!retFits) {
+                doc.addPage();
+                createHeader(doc.internal.getNumberOfPages(), doc.internal.getNumberOfPages());
+                y = 55;
+            }
+            drawSplittableTable(returnsList, drawRetHdr, drawRetRowFn, 'PATCH LIST RETOURS', y);
             
             // Footer pour toutes les pages
             const pageCount = doc.internal.getNumberOfPages();
@@ -4392,7 +4625,7 @@
                 // Texte du footer principal avec version
                 doc.setFontSize(8);
                 doc.setTextColor(150);
-                doc.text(`Généré par FICHE TECH CREATOR v1.2 Beta - ${new Date().toLocaleDateString('fr-FR')}`, 105, 287, { align: 'center' });
+                doc.text(`Généré par FICHE TECH CREATOR v2 Beta - ${new Date().toLocaleDateString('fr-FR')}`, 105, 287, { align: 'center' });
                 
                 // Copyright complet
                 doc.setFontSize(7);
@@ -4426,7 +4659,7 @@
             csv += `Nombre de musiciens,${formData.numMusicians}\n\n`;
             
             // Configuration Technique
-            if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.speakerSystems.length > 0)) {
+            if (formData.technical && (formData.technical.consoles.length > 0 || formData.technical.effects.length > 0 || formData.technical.speakerSystems.length > 0 || formData.technical.monitorSystems.length > 0)) {
                 csv += 'CONFIGURATION TECHNIQUE\n';
                 
                 if (formData.technical.consoles && formData.technical.consoles.length > 0) {
@@ -4477,7 +4710,7 @@
             }
             
             csv += '\n';
-            csv += `Généré le ${new Date().toLocaleDateString('fr-FR')} par FICHE TECH CREATOR v1.2 Beta\n`;
+            csv += `Généré le ${new Date().toLocaleDateString('fr-FR')} par FICHE TECH CREATOR v2 Beta\n`;
             csv += '© 2025 Arnisound Tools - Tous droits réservés\n';
             csv += 'Usage personnel et non-commercial uniquement\n';
             csv += 'Contact: arnisound.tools@gmail.com\n';
@@ -4493,7 +4726,7 @@
             link.click();
             document.body.removeChild(link);
         }
-        
+
         function restart() {
             location.reload();
         }
@@ -4660,7 +4893,7 @@
                    font-size: 0.5em;">
         <div style="max-width: 800px; margin: 0 auto;">
             <p style="margin: 5px 0;">
-                <strong>Fiche Tech Creator v1.2 Beta</strong>
+                <strong>Fiche Tech Creator v2 Beta</strong>
             </p>
             <p style="margin: 5px 0;">
                 © 2025 Théo Arnissolle - Tous droits réservés

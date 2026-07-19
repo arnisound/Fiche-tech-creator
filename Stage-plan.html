@@ -29,32 +29,18 @@
 
         /* HEADER */
         .header {
-            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            background: linear-gradient(180deg, #000000 0%, #ffffff 300%);
             color: white;
-            padding: 20px 30px;
+            padding: 45px 45px;
+            text-align: center;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            border-bottom: 3px solid #C19A3E;
         }
 
-        .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header .logo {
-            color: #C19A3E;
-            font-size: 28px;
-        }
-
-        .header-info {
-            text-align: right;
-            font-size: 13px;
-            opacity: 0.8;
+        .header svg {
+            max-width: 100%;
+            height: auto;
         }
 
         /* BARRE D'OUTILS DE VUE */
@@ -620,14 +606,19 @@
         }
 
         .element-icon {
-            font-size: 20px;
-            width: 32px;
-            height: 32px;
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #f8f9fa;
             border-radius: 4px;
+            overflow: hidden;
+        }
+        .element-icon svg {
+            width: 48px;
+            height: 48px;
         }
 
         .element-info {
@@ -816,19 +807,249 @@
         .patch-table tr:hover {
             background: #fffbf0;
         }
+
+        .patch-list-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .patch-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .patch-btn-primary {
+            background: #C19A3E;
+            color: white;
+        }
+
+        .patch-btn-primary:hover {
+            background: #a07c2e;
+        }
+
+        .patch-btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .patch-btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .patch-btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 2px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .patch-btn-danger:hover {
+            background: #c82333;
+        }
+
+        .patch-source-info {
+            font-size: 11px;
+            color: #888;
+            margin-left: auto;
+            font-style: italic;
+        }
+        /* BARRE D'ACTION EN BAS DE PAGE */
+        #bottom-action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 3px solid #C19A3E;
+            padding: 12px 20px;
+            z-index: 2000;
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.18);
+        }
+
+        .bottom-bar-inner {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .bottom-bar-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 4px;
+        }
+
+        .bottom-btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .bottom-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .bottom-btn-primary {
+            background: #C19A3E;
+            color: white;
+        }
+
+        .bottom-btn-primary:hover {
+            background: #a8842f;
+        }
+
+        .bottom-btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+
+        .bottom-btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .bottom-btn-share {
+            background: #4A90E2;
+            color: white;
+        }
+        .bottom-btn-share:hover {
+            background: #357ABD;
+        }
+
+        /* === SHARE SHEET === */
+        #share-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 3000;
+        }
+        #share-overlay.active {
+            display: block;
+        }
+        #share-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            padding: 20px 24px 40px;
+            z-index: 3001;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.18);
+        }
+        #share-sheet.open {
+            transform: translateY(0);
+        }
+        .share-sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            margin: 0 auto 18px;
+        }
+        .share-sheet-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 24px;
+            letter-spacing: 0.3px;
+        }
+        .share-sheet-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .share-platform-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 12px 14px;
+            border-radius: 14px;
+            transition: background 0.18s;
+            font-size: 12px;
+            font-weight: 600;
+            color: #444;
+            min-width: 72px;
+        }
+        .share-platform-btn:hover {
+            background: #f0f0f0;
+        }
+        .share-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .share-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        /* Espace pour ne pas cacher le contenu derrière la barre fixe */
+        body {
+            padding-bottom: 72px;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
         <!-- HEADER -->
         <div class="header">
-            <h1>
-                <span class="logo">🎵</span>
-                Plan de Scène - Module Standalone
-            </h1>
-            <div class="header-info">
-                <div><strong>Arnisound Tools</strong></div>
-                <div>Version Beta 1.2 avec Calques</div>
+            <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <svg width="1000" height="200" viewBox="0 0 1600 320" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                    <!-- Cercle blanc -->
+                    <circle cx="400" cy="160" r="140" fill="none" stroke="#FFFFFF" stroke-width="12"/>
+                    <!-- Texte FICHE TECH -->
+                    <text x="400" y="140" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="36" text-anchor="middle" letter-spacing="3">FICHE TECH</text>
+                    <!-- Texte CREATOR -->
+                    <text x="400" y="185" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="36" text-anchor="middle" letter-spacing="3">CREATOR</text>
+                    <!-- Forme d'onde dorée -->
+                    <path d="M 330 250 C 338 250, 343 247, 348 243 C 353 239, 358 247, 363 250 C 368 253, 373 254, 378 253 C 383 252, 388 243, 396 237 C 404 231, 409 237, 414 243 C 419 249, 424 253, 429 254 C 434 255, 439 254, 444 253 C 449 252, 454 250, 459 250.5 C 464 251, 466.5 251.5, 469 252" fill="none" stroke="#C19A3E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Groupe texte ARNISOUND TOOLS -->
+                    <g transform="translate(1050, 0)">
+                        <text x="0" y="100" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="38" text-anchor="middle" letter-spacing="2">ARNISOUND</text>
+                        <text x="0" y="145" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="38" text-anchor="middle" letter-spacing="3">TOOLS</text>
+                        <text x="0" y="190" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="38" text-anchor="middle" letter-spacing="3">LIVE &amp; AV</text>
+                        <text x="0" y="235" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="38" text-anchor="middle" letter-spacing="3">APP</text>
+                    </g>
+                </svg>
+                <p style="color: white; font-size: 1.1em; margin-top: 15px; margin-bottom: 0; opacity: 0.95; text-align: center;">Plan de Scène</p>
             </div>
         </div>
 
@@ -1099,6 +1320,25 @@
                         </div>
                     </div>
                     </div><!-- Fin properties-content -->
+                </div>
+
+                <!-- GROUPES DE SCÈNE (auto-générés depuis Stage-layout) -->
+                <div id="groupesScenePanel" style="border-top: 2px solid #c19a3e; padding: 12px; display:none; background: #0d0d0d;">
+                    <h4 style="color:#c19a3e; font-size:0.8em; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                        🎭 Groupes de scène
+                    </h4>
+                    <label style="display:block; color:#aaa; font-size:0.8em; margin-bottom:5px;">Forme des groupes :</label>
+                    <select id="groupShapeSelect" style="width:100%; background:#1a1a1a; color:#fff; border:1px solid #555; border-radius:6px; padding:6px; margin-bottom:8px; font-size:0.85em;">
+                        <option value="rect">Rectangle</option>
+                        <option value="square">Carré</option>
+                        <option value="circle">Cercle</option>
+                    </select>
+                    <button id="btnLoadGroups" style="width:100%; background:#c19a3e; color:#000; border:none; border-radius:6px; padding:7px; font-weight:bold; cursor:pointer; margin-bottom:5px; font-size:0.82em;">
+                        ↺ Recharger les groupes
+                    </button>
+                    <button id="btnClearGroups" style="width:100%; background:#222; color:#888; border:1px solid #333; border-radius:6px; padding:6px; cursor:pointer; font-size:0.82em;">
+                        🗑 Effacer les groupes
+                    </button>
                 </div>
 
                 <!-- LISTE D'ICÔNES -->
@@ -13334,33 +13574,42 @@
         <!-- PATCH LIST -->
         <div class="patch-list">
             <h3>🔌 Patch List (Tableau modifiable)</h3>
+            <div class="patch-list-controls">
+                <button class="patch-btn patch-btn-primary" onclick="loadPatchListFromStorage()">🔄 Charger depuis Fiche Tech</button>
+                <button class="patch-btn patch-btn-secondary" onclick="addPatchRow()">➕ Ajouter canal</button>
+                <span class="patch-source-info" id="patchSourceInfo"></span>
+            </div>
             <table class="patch-table" id="patch-table">
                 <thead>
                     <tr>
                         <th style="width: 60px;">Canal</th>
                         <th>Instrument</th>
                         <th>Microphone</th>
-                        <th>Notes</th>
+                        <th>Pied</th>
+                        <th style="width: 40px;"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="patch-tbody">
                     <tr>
                         <td contenteditable="true">1</td>
                         <td contenteditable="true">Grosse caisse</td>
                         <td contenteditable="true">Shure Beta 52A</td>
                         <td contenteditable="true">-</td>
+                        <td><button class="patch-btn-danger" onclick="removePatchRow(this)">✕</button></td>
                     </tr>
                     <tr>
                         <td contenteditable="true">2</td>
                         <td contenteditable="true">Caisse claire</td>
                         <td contenteditable="true">Shure SM57</td>
                         <td contenteditable="true">-</td>
+                        <td><button class="patch-btn-danger" onclick="removePatchRow(this)">✕</button></td>
                     </tr>
                     <tr>
                         <td contenteditable="true">3</td>
                         <td contenteditable="true">-</td>
                         <td contenteditable="true">-</td>
                         <td contenteditable="true">-</td>
+                        <td><button class="patch-btn-danger" onclick="removePatchRow(this)">✕</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -13489,6 +13738,10 @@
                 this.drawings = [];
                 this.selectedDrawing = null;
                 this.multiSelectedDrawings = []; // Pour la sélection multiple
+                // Rubber-band (sélection par glisser-lasso)
+                this.isRubberBand = false;
+                this.rubberBandStart = null;
+                this.rubberBandEnd = null;
                 this.currentTool = 'select';
                 this.isDrawing = false;
                 this.currentDrawing = null;
@@ -13516,6 +13769,11 @@
                 this.isDragging = false;
                 this.dragStart = { x: 0, y: 0 };
                 this.dragOffset = { x: 0, y: 0 };
+
+                // Multi-drag (déplacement groupé)
+                this.isMultiDragging = false;
+                this.multiDragStart = { x: 0, y: 0 };
+                this.multiDragInitialPositions = [];
                 
                 // Resize
                 this.resizeHandles = [];
@@ -13605,9 +13863,37 @@
                     this.drawSelectionBox(this.selectedDrawing);
                 }
 
+                // Highlights pour la multi-sélection rubber-band (bleu)
+                if (this.multiSelectedDrawings && this.multiSelectedDrawings.length > 0) {
+                    this.multiSelectedDrawings.forEach(d => {
+                        if (d !== this.selectedDrawing) {
+                            this.drawSelectionBox(d, '#4a9eff');
+                        }
+                    });
+                }
+
                 // Sélection visuelle pour l'élément sélectionné
                 if (this.selectedElement) {
                     this.drawElementSelection(this.selectedElement);
+                }
+
+                // Rectangle rubber-band (lasso de sélection)
+                if (this.isRubberBand && this.rubberBandStart && this.rubberBandEnd) {
+                    const effectiveScale = this.scale * this.zoom;
+                    const x1 = Math.min(this.rubberBandStart.x, this.rubberBandEnd.x) * effectiveScale;
+                    const y1 = Math.min(this.rubberBandStart.y, this.rubberBandEnd.y) * effectiveScale;
+                    const w  = Math.abs(this.rubberBandEnd.x - this.rubberBandStart.x) * effectiveScale;
+                    const h  = Math.abs(this.rubberBandEnd.y - this.rubberBandStart.y) * effectiveScale;
+                    const ctx = this.ctx;
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(74, 158, 255, 0.08)';
+                    ctx.fillRect(x1, y1, w, h);
+                    ctx.strokeStyle = '#4a9eff';
+                    ctx.lineWidth = 1.5;
+                    ctx.setLineDash([5, 4]);
+                    ctx.strokeRect(x1, y1, w, h);
+                    ctx.setLineDash([]);
+                    ctx.restore();
                 }
             }
 
@@ -13816,29 +14102,36 @@
                                 ctx.setLineDash([]);
                             }
                             
-                            // Word wrap du texte dans la zone
+                            // Word wrap du texte dans la zone (avec support des sauts de ligne \n)
                             const text = layer.text || '';
-                            const words = text.split(' ');
                             const lineHeight = fontSize * 1.2;
-                            let line = '';
                             let y = minY + fontSize;
-                            
-                            for (let i = 0; i < words.length; i++) {
-                                const testLine = line + words[i] + ' ';
-                                const metrics = ctx.measureText(testLine);
-                                
-                                if (metrics.width > boxWidth - 8 && i > 0) {
+                            const paragraphs = text.split('\n');
+
+                            outerLoop: for (let p = 0; p < paragraphs.length; p++) {
+                                const words = paragraphs[p].split(' ');
+                                let line = '';
+
+                                for (let i = 0; i < words.length; i++) {
+                                    const testLine = line + words[i] + ' ';
+                                    const metrics = ctx.measureText(testLine);
+
+                                    if (metrics.width > boxWidth - 8 && i > 0) {
+                                        ctx.fillText(line, minX + 4, y);
+                                        line = words[i] + ' ';
+                                        y += lineHeight;
+
+                                        // Arrêter si on dépasse la hauteur de la zone
+                                        if (y > minY + boxHeight) break outerLoop;
+                                    } else {
+                                        line = testLine;
+                                    }
+                                }
+                                if (y <= minY + boxHeight) {
                                     ctx.fillText(line, minX + 4, y);
-                                    line = words[i] + ' ';
                                     y += lineHeight;
-                                    
-                                    // Arrêter si on dépasse la hauteur de la zone
-                                    if (y > minY + boxHeight) break;
-                                } else {
-                                    line = testLine;
                                 }
                             }
-                            ctx.fillText(line, minX + 4, y);
                             
                         } else {
                             // Ancien système : texte simple à une position
@@ -13893,11 +14186,11 @@
                 ctx.restore();
             }
 
-            drawSelectionBox(drawing) {
+            drawSelectionBox(drawing, color) {
                 const ctx = this.ctx;
                 const effectiveScale = this.scale * this.zoom;
 
-                ctx.strokeStyle = '#C19A3E';
+                ctx.strokeStyle = color || '#C19A3E';
                 ctx.lineWidth = 2;
                 ctx.setLineDash([5, 5]);
 
@@ -15413,23 +15706,51 @@
                     
                     // Vérifier si on clique sur un calque
                     const clickedDrawing = this.findClickedDrawing(pos);
+
+                    // --- Déplacement groupé (multi-drag) ---
+                    // Si on a une multi-sélection (>= 2) et qu'on clique sur un élément du groupe
+                    if (clickedDrawing && this.multiSelectedDrawings.length >= 2 && this.multiSelectedDrawings.includes(clickedDrawing)) {
+                        this.isMultiDragging = true;
+                        this.multiDragStart = { x: pos.x, y: pos.y };
+                        this.canvas.style.cursor = 'grabbing';
+
+                        // Snapshot des positions initiales de tous les éléments multi-sélectionnés
+                        this.multiDragInitialPositions = this.multiSelectedDrawings.map(d => {
+                            if (d.type === 'draw' && d.points && d.points.length > 0) {
+                                return { type: 'draw', points: d.points.map(p => ({ x: p.x, y: p.y })) };
+                            } else if (d.type === 'svg_element') {
+                                return { type: 'svg_element', x: d.x, y: d.y };
+                            } else if (d.type === 'image') {
+                                return { type: 'image', startX: d.startX, startY: d.startY };
+                            } else if (d.type === 'text') {
+                                return { type: 'text', startX: d.startX, startY: d.startY, endX: d.endX, endY: d.endY };
+                            } else {
+                                // rect, circle, line, arrow, etc.
+                                return { type: d.type, startX: d.startX, startY: d.startY, endX: d.endX, endY: d.endY };
+                            }
+                        });
+                        return;
+                    }
+
                     if (clickedDrawing) {
                         // Détecter le double-clic sur une zone de texte
                         const now = Date.now();
                         const isDoubleClick = (now - this.lastClickTime < 300) && (this.lastClickedDrawing === clickedDrawing);
-                        
+
                         if (isDoubleClick && clickedDrawing.type === 'text' && clickedDrawing.endX && clickedDrawing.endY) {
                             // Double-clic sur une zone de texte : réouvrir l'éditeur
                             this.openTextEditor(clickedDrawing, true); // true = mode édition
                             return;
                         }
-                        
+
                         this.lastClickTime = now;
                         this.lastClickedDrawing = clickedDrawing;
-                        
+
                         this.selectedDrawing = clickedDrawing;
                         this.selectedElement = null;
-                        
+                        // Réinitialiser la multi-sélection quand on clique sur un élément hors du groupe
+                        this.multiSelectedDrawings = [];
+
                         // Calculer l'offset pour le déplacement
                         if (clickedDrawing.type === 'draw' && clickedDrawing.points && clickedDrawing.points.length > 0) {
                             // Pour le dessin libre, utiliser le premier point comme référence
@@ -15452,7 +15773,7 @@
                                 y: pos.y - clickedDrawing.startY
                             };
                         }
-                        
+
                         this.isDragging = true;
                         this.updateLayersList();
                         this.showProperties(clickedDrawing);
@@ -15475,9 +15796,13 @@
                         return;
                     }
 
-                    // Désélection
+                    // Désélection + démarrer rubber-band
                     this.selectedElement = null;
                     this.selectedDrawing = null;
+                    this.multiSelectedDrawings = [];
+                    this.isRubberBand = true;
+                    this.rubberBandStart = { x: pos.x, y: pos.y };
+                    this.rubberBandEnd = { x: pos.x, y: pos.y };
                     this.updateLayersList();
                     this.hideProperties();
                     this.draw();
@@ -15521,7 +15846,47 @@
 
             onMouseMove(e) {
                 const pos = this.getMousePos(e);
-                
+
+                // Mise à jour du rectangle rubber-band
+                if (this.isRubberBand && this.rubberBandStart) {
+                    this.rubberBandEnd = { x: pos.x, y: pos.y };
+                    this.draw();
+                    return;
+                }
+
+                // Déplacement groupé (multi-drag)
+                if (this.isMultiDragging && this.multiSelectedDrawings.length >= 2) {
+                    const dx = pos.x - this.multiDragStart.x;
+                    const dy = pos.y - this.multiDragStart.y;
+
+                    this.multiSelectedDrawings.forEach((d, i) => {
+                        const init = this.multiDragInitialPositions[i];
+                        if (d.type === 'draw' && d.points && init.points) {
+                            d.points = init.points.map(p => ({ x: p.x + dx, y: p.y + dy }));
+                        } else if (d.type === 'svg_element') {
+                            d.x = init.x + dx;
+                            d.y = init.y + dy;
+                        } else if (d.type === 'image') {
+                            d.startX = init.startX + dx;
+                            d.startY = init.startY + dy;
+                        } else if (d.type === 'text') {
+                            d.startX = init.startX + dx;
+                            d.startY = init.startY + dy;
+                            if (init.endX !== undefined) d.endX = init.endX + dx;
+                            if (init.endY !== undefined) d.endY = init.endY + dy;
+                        } else {
+                            // rect, circle, line, arrow, etc.
+                            d.startX = init.startX + dx;
+                            d.startY = init.startY + dy;
+                            d.endX = init.endX + dx;
+                            d.endY = init.endY + dy;
+                        }
+                    });
+
+                    this.draw();
+                    return;
+                }
+
                 if (this.isRotating && this.selectedDrawing && this.rotateStart) {
                     // Rotation en cours pour svg_element
                     const centerX = this.rotateStart.centerX;
@@ -15733,10 +16098,45 @@
                         this.currentDrawing.endY = pos.y;
                     }
                     this.draw();
+                } else if (this.currentTool === 'select' && this.multiSelectedDrawings.length >= 2) {
+                    // Curseur grab au survol d'un élément multi-sélectionné
+                    const hovered = this.findClickedDrawing(pos);
+                    if (hovered && this.multiSelectedDrawings.includes(hovered)) {
+                        this.canvas.style.cursor = 'grab';
+                    } else {
+                        this.canvas.style.cursor = 'crosshair';
+                    }
                 }
             }
 
             onMouseUp(e) {
+                // Finaliser la sélection rubber-band
+                if (this.isRubberBand && this.rubberBandStart && this.rubberBandEnd) {
+                    this.isRubberBand = false;
+                    const rx1 = Math.min(this.rubberBandStart.x, this.rubberBandEnd.x);
+                    const rx2 = Math.max(this.rubberBandStart.x, this.rubberBandEnd.x);
+                    const ry1 = Math.min(this.rubberBandStart.y, this.rubberBandEnd.y);
+                    const ry2 = Math.max(this.rubberBandStart.y, this.rubberBandEnd.y);
+
+                    // Sélectionner tous les drawings dont la bounding box intersecte le rect
+                    if (rx2 - rx1 > 0.05 || ry2 - ry1 > 0.05) { // ignorer les clics ponctuels
+                        this.multiSelectedDrawings = this.drawings.filter(function(d) {
+                            if (d.visible === false) return false;
+                            const dMinX = Math.min(d.startX !== undefined ? d.startX : (d.x || 0), d.endX !== undefined ? d.endX : ((d.x || 0) + (d.width || 0)));
+                            const dMaxX = Math.max(d.startX !== undefined ? d.startX : (d.x || 0), d.endX !== undefined ? d.endX : ((d.x || 0) + (d.width || 0)));
+                            const dMinY = Math.min(d.startY !== undefined ? d.startY : (d.y || 0), d.endY !== undefined ? d.endY : ((d.y || 0) + (d.height || 0)));
+                            const dMaxY = Math.max(d.startY !== undefined ? d.startY : (d.y || 0), d.endY !== undefined ? d.endY : ((d.y || 0) + (d.height || 0)));
+                            return dMaxX >= rx1 && dMinX <= rx2 && dMaxY >= ry1 && dMinY <= ry2;
+                        });
+                    }
+
+                    this.rubberBandStart = null;
+                    this.rubberBandEnd = null;
+                    if (typeof this.updateLayersList === 'function') this.updateLayersList();
+                    this.draw();
+                    return;
+                }
+
                 if (this.isDrawing && this.currentDrawing) {
                     // Finaliser le dessin
                     if (this.currentTool === 'draw' && this.currentDrawing.points.length > 1) {
@@ -15783,7 +16183,14 @@
                     this.rotateStart = null;
                     this.canvas.style.cursor = 'crosshair';
                 }
-                
+
+                // Arrêter le déplacement groupé (conserver la multi-sélection)
+                if (this.isMultiDragging) {
+                    this.isMultiDragging = false;
+                    this.multiDragInitialPositions = [];
+                    this.canvas.style.cursor = 'grab';
+                }
+
                 this.isDragging = false;
                 this.draw();
             }
@@ -15797,7 +16204,36 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             stagePlan = new StagePlanCanvas();
-            
+
+            // Créer le groupe "Basique" au sommet de la palette (clones des éléments existants)
+            (function() {
+                const basiqueSectionTypes = [
+                    'WEDGE', 'SIDE_L', 'SIDE_R', 'MIXETTE', 'IEM',
+                    'TABOURET', 'AMPLI_BASSE', 'AMPLI_GUITARE', 'PEDALBOARD',
+                    'BATTERIE', 'GUITARE_ELECTRIQUE', 'GUITARE_ACOUSTIQUE', 'BASSE', 'PIANO'
+                ];
+                const elementsPalette = document.querySelector('.elements-palette');
+                if (elementsPalette) {
+                    const basiqueSection = document.createElement('div');
+                    basiqueSection.className = 'palette-section';
+                    basiqueSection.innerHTML = '<h3>⭐ Basique</h3><div class="palette-items"></div>';
+                    const basiqueItems = basiqueSection.querySelector('.palette-items');
+                    basiqueSectionTypes.forEach(type => {
+                        const original = document.querySelector(`.element-item[data-type="${type}"]`);
+                        if (original) {
+                            const clone = original.cloneNode(true);
+                            basiqueItems.appendChild(clone);
+                        }
+                    });
+                    elementsPalette.insertBefore(basiqueSection, elementsPalette.firstChild);
+                    // Ajouter le listener collapsible pour cette section
+                    const h3 = basiqueSection.querySelector('h3');
+                    h3.addEventListener('click', () => {
+                        basiqueSection.classList.toggle('collapsed');
+                    });
+                }
+            })();
+
             // CONVERTIR LES SVG TEXTE EN IMAGES VISIBLES dans la palette
             console.log('🎨 Loading palette SVG icons...');
             const iconDivs = document.querySelectorAll('.element-icon');
@@ -15939,7 +16375,7 @@
             });
 
             document.getElementById('generate-tech-sheet').addEventListener('click', () => {
-                alert('Génération de la fiche technique complète...\n\nCette fonction créera un document PDF professionnel avec :\n- Le plan de scène\n- La patch list\n- Les besoins techniques\n- Les informations du groupe\n\nÀ venir dans la prochaine version !');
+                generateCompleteSheet();
             });
 
             // Modal Templates
@@ -16019,6 +16455,25 @@
                     
                     stagePlan.addElement(type, width, height, name, category);
                 });
+            });
+
+            // Fixer le viewBox de chaque SVG de la palette pour afficher le preview
+            document.querySelectorAll('.element-icon svg').forEach(svg => {
+                const firstPath = svg.querySelector('path');
+                if (!firstPath) return;
+                const d = firstPath.getAttribute('d') || '';
+                // Extraire MAXX : premier grand nombre suivi de ",-0.5C"
+                const mX = d.match(/([\d.]+),-0\.5C/);
+                // Extraire MAXY : "-0.5," suivi d'un grand nombre avant "C -0.5"
+                const mY = d.match(/-0\.5,([\d.]+)C -0\.5/);
+                if (mX && mY) {
+                    const maxX = parseFloat(mX[1]);
+                    const maxY = parseFloat(mY[1]);
+                    svg.setAttribute('viewBox', `-0.5 -0.5 ${maxX + 1} ${maxY + 1}`);
+                    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                    svg.setAttribute('width', '48');
+                    svg.setAttribute('height', '48');
+                }
             });
 
             // Tool selection
@@ -27942,6 +28397,930 @@
             }
             return SVG_DATABASE[category][type];
         }
+
+        // ============================================================
+        // GROUPES DE SCÈNE — Chargement depuis stageGroupsData
+        // ============================================================
+
+        const STAGE_COL_METERS = {
+            j2: 1.0, j1: 2.5, jc: 4.5,
+            c:  6.0,
+            cc: 7.5, c1: 9.5, c2: 11.0
+        };
+        const STAGE_ROW_METERS = {
+            r1: 0.8,  // Fond
+            r2: 2.4,  // Arrière
+            r3: 4.0,  // Milieu
+            r4: 5.6,  // Avant
+            r5: 7.2   // Devant
+        };
+
+        function positionToMeters(posId) {
+            const parts = posId.split('_');
+            const rowId = parts[0];
+            const colId = parts.slice(1).join('_');
+            return {
+                cx: STAGE_COL_METERS[colId] !== undefined ? STAGE_COL_METERS[colId] : 6.0,
+                cy: STAGE_ROW_METERS[rowId] !== undefined ? STAGE_ROW_METERS[rowId] : 4.0
+            };
+        }
+
+        function getContrastColorForGroup(hexColor) {
+            try {
+                const r = parseInt(hexColor.slice(1, 3), 16);
+                const g = parseInt(hexColor.slice(3, 5), 16);
+                const b = parseInt(hexColor.slice(5, 7), 16);
+                return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.5 ? '#000000' : '#ffffff';
+            } catch(e) { return '#000000'; }
+        }
+
+        function darkenColorForGroup(hex, amount) {
+            try {
+                const r = Math.max(0, parseInt(hex.slice(1, 3), 16) - Math.round(255 * amount));
+                const g = Math.max(0, parseInt(hex.slice(3, 5), 16) - Math.round(255 * amount));
+                const b = Math.max(0, parseInt(hex.slice(5, 7), 16) - Math.round(255 * amount));
+                return '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+            } catch(e) { return '#444444'; }
+        }
+
+        function createGroupDrawings(group, cx, cy, shapeType) {
+            const drawings = [];
+            const color = group.color || '#888888';
+            const textColor = getContrastColorForGroup(color);
+            let startX, startY, endX, endY;
+
+            if (shapeType === 'square') {
+                startX = cx - 0.95; endX = cx + 0.95;
+                startY = cy - 0.95; endY = cy + 0.95;
+            } else if (shapeType === 'circle') {
+                startX = cx - 1.0; endX = cx + 1.0;
+                startY = cy - 1.0; endY = cy + 1.0;
+            } else { // rect (default)
+                startX = cx - 1.1; endX = cx + 1.1;
+                startY = cy - 0.85; endY = cy + 0.85;
+            }
+
+            const shapeH = endY - startY;
+            const nameZoneH = shapeH * 0.42;
+
+            // 1. Forme colorée (fond)
+            drawings.push({
+                type: shapeType === 'circle' ? 'circle' : 'rect',
+                startX, startY, endX, endY,
+                fillColor: color,
+                fillEnabled: true,
+                strokeColor: darkenColorForGroup(color, 0.25),
+                strokeWidth: 2,
+                autoGenerated: true,
+                groupId: group.name,
+                name: (group.name || 'Groupe') + ' — Bloc',
+                visible: true
+            });
+
+            // 2. Texte NOM — gras, en haut de la forme
+            drawings.push({
+                type: 'text',
+                startX: startX + 0.08,
+                startY: startY + 0.07,
+                endX: endX - 0.08,
+                endY: startY + nameZoneH,
+                text: (group.icon || '') + ' ' + (group.name || '').toUpperCase() + '.',
+                textColor: textColor,
+                fontSize: 11,
+                bold: true,
+                italic: false,
+                bgEnabled: false,
+                autoGenerated: true,
+                groupId: group.name,
+                name: (group.name || 'Groupe') + ' — Nom',
+                visible: true
+            });
+
+            // 3. Texte POWER — gras, bien visible, juste sous le nom
+            const channels = (group.tracks || []).map(function(t) { return t.channel; });
+            const auxLabel = group.auxPair
+                ? 'AUX ' + group.auxNum + '-' + group.auxPair
+                : (group.auxNum ? 'AUX ' + group.auxNum : '');
+            const monitorInfo = auxLabel ? auxLabel + (group.monitorType ? ' · ' + group.monitorType : '') : '';
+            const inputInfo = channels.length > 0 ? 'inputs — Ch. ' + channels.join(', ') : '';
+            const powerInfo = (group.powerNeeds && group.powerNeeds.length > 0)
+                ? '⚡ ' + group.powerNeeds[0]
+                : '';
+
+            let detailStartY = startY + nameZoneH + 0.04;
+
+            if (powerInfo) {
+                const powerZoneH = 0.28;
+                drawings.push({
+                    type: 'text',
+                    startX: startX + 0.08,
+                    startY: detailStartY,
+                    endX: endX - 0.08,
+                    endY: detailStartY + powerZoneH,
+                    text: powerInfo,
+                    textColor: textColor,
+                    fontSize: 13,
+                    bold: true,
+                    italic: false,
+                    bgEnabled: false,
+                    autoGenerated: true,
+                    groupId: group.name,
+                    name: (group.name || 'Groupe') + ' — Power',
+                    visible: true
+                });
+                detailStartY += powerZoneH;
+            }
+
+            // 4. Texte DÉTAILS — normal, bas de la forme
+            const otherDetails = [monitorInfo, inputInfo].filter(Boolean).join('\n');
+            if (otherDetails) {
+                drawings.push({
+                    type: 'text',
+                    startX: startX + 0.08,
+                    startY: detailStartY,
+                    endX: endX - 0.08,
+                    endY: endY - 0.05,
+                    text: otherDetails,
+                    textColor: textColor,
+                    fontSize: 9,
+                    bold: false,
+                    italic: false,
+                    bgEnabled: false,
+                    autoGenerated: true,
+                    groupId: group.name,
+                    name: (group.name || 'Groupe') + ' — Détails',
+                    visible: true
+                });
+            }
+
+            return drawings;
+        }
+
+        function loadStageGroupsData() {
+            try {
+                var raw = localStorage.getItem('stageGroupsData');
+                if (!raw) return;
+
+                var stageData = JSON.parse(raw);
+                var groups = stageData.groups || {};
+                if (Object.keys(groups).length === 0) return;
+
+                var panel = document.getElementById('groupesScenePanel');
+                if (panel) panel.style.display = 'block';
+
+                var shapeSelect = document.getElementById('groupShapeSelect');
+                var shapeType = shapeSelect ? shapeSelect.value : 'rect';
+
+                if (stagePlan && stagePlan.drawings) {
+                    stagePlan.drawings = stagePlan.drawings.filter(function(d) { return !d.autoGenerated; });
+                }
+
+                // Largeur totale d'un bloc selon le type de forme
+                var blockWidth = shapeType === 'square' ? 1.9 : shapeType === 'circle' ? 2.0 : 2.2;
+
+                // 1. Calculer les positions initiales
+                var items = [];
+                Object.keys(groups).forEach(function(groupId) {
+                    var group = groups[groupId];
+                    if (!group.position) return;
+                    var parts = group.position.split('_');
+                    var rowId = parts[0];
+                    var pos = positionToMeters(group.position);
+                    items.push({ group: group, cx: pos.cx, cy: pos.cy, rowId: rowId });
+                });
+
+                // 2. Regrouper par ligne
+                var byRow = {};
+                items.forEach(function(item) {
+                    if (!byRow[item.rowId]) byRow[item.rowId] = [];
+                    byRow[item.rowId].push(item);
+                });
+
+                // 3. Pour chaque ligne : push-right puis recentrage
+                Object.keys(byRow).forEach(function(rowId) {
+                    var row = byRow[rowId];
+                    row.sort(function(a, b) { return a.cx - b.cx; });
+
+                    // Push-right : espacer bord à bord
+                    for (var i = 1; i < row.length; i++) {
+                        var minCx = row[i - 1].cx + blockWidth;
+                        if (row[i].cx < minCx) row[i].cx = minCx;
+                    }
+
+                    // Recentrer autour du centre original de la ligne
+                    if (row.length > 1) {
+                        var origCenter = row.reduce(function(sum, it) { return sum + it.cx; }, 0) / row.length;
+                        var newCenter = (row[0].cx + row[row.length - 1].cx) / 2;
+                        var shift = origCenter - newCenter;
+                        row.forEach(function(it) { it.cx += shift; });
+                    }
+                });
+
+                // 4. Générer les blocs avec les positions corrigées
+                items.forEach(function(item) {
+                    var newDrawings = createGroupDrawings(item.group, item.cx, item.cy, shapeType);
+                    if (stagePlan && stagePlan.drawings) {
+                        stagePlan.drawings.push.apply(stagePlan.drawings, newDrawings);
+                    }
+                });
+
+                if (stagePlan) {
+                    stagePlan.draw();
+                    if (typeof stagePlan.updateLayersList === 'function') stagePlan.updateLayersList();
+                }
+            } catch(e) {
+                console.error('Erreur chargement groupes de scène:', e);
+            }
+        }
+
+        // ============================================
+        // PATCH LIST — CHARGEMENT DEPUIS FICHE TECH
+        // ============================================
+
+        function loadPatchListFromStorage() {
+            try {
+                var raw = localStorage.getItem('patchList');
+                var infoEl = document.getElementById('patchSourceInfo');
+                if (!raw) {
+                    if (infoEl) infoEl.textContent = 'Aucune fiche tech trouvée dans le navigateur.';
+                    return;
+                }
+                var patchList = JSON.parse(raw);
+                if (!Array.isArray(patchList) || patchList.length === 0) {
+                    if (infoEl) infoEl.textContent = 'Patch list vide.';
+                    return;
+                }
+                var tbody = document.getElementById('patch-tbody');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+                patchList.forEach(function(item) {
+                    var tr = document.createElement('tr');
+                    tr.innerHTML =
+                        '<td contenteditable="true">' + (item.channel || '') + '</td>' +
+                        '<td contenteditable="true">' + (item.instrument || '') + '</td>' +
+                        '<td contenteditable="true">' + (item.mic || '') + '</td>' +
+                        '<td contenteditable="true">' + (item.stand || '-') + '</td>' +
+                        '<td><button class="patch-btn-danger" onclick="removePatchRow(this)">✕</button></td>';
+                    tbody.appendChild(tr);
+                });
+                if (infoEl) infoEl.textContent = '✅ ' + patchList.length + ' canaux chargés depuis la fiche tech.';
+            } catch(e) {
+                console.error('Erreur chargement patch list:', e);
+            }
+        }
+
+        function addPatchRow() {
+            var tbody = document.getElementById('patch-tbody');
+            if (!tbody) return;
+            var rows = tbody.querySelectorAll('tr');
+            var nextCh = rows.length + 1;
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+                '<td contenteditable="true">' + nextCh + '</td>' +
+                '<td contenteditable="true">-</td>' +
+                '<td contenteditable="true">-</td>' +
+                '<td contenteditable="true">-</td>' +
+                '<td><button class="patch-btn-danger" onclick="removePatchRow(this)">✕</button></td>';
+            tbody.appendChild(tr);
+        }
+
+        function removePatchRow(btn) {
+            var tr = btn.closest('tr');
+            if (tr) tr.remove();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                loadStageGroupsData();
+                loadPatchListFromStorage();
+
+                var btnLoad = document.getElementById('btnLoadGroups');
+                if (btnLoad) btnLoad.addEventListener('click', loadStageGroupsData);
+
+                var btnClear = document.getElementById('btnClearGroups');
+                if (btnClear) btnClear.addEventListener('click', function() {
+                    if (stagePlan && stagePlan.drawings) {
+                        stagePlan.drawings = stagePlan.drawings.filter(function(d) { return !d.autoGenerated; });
+                        stagePlan.draw();
+                        if (typeof stagePlan.updateLayersList === 'function') stagePlan.updateLayersList();
+                    }
+                });
+
+                var shapeSelectEl = document.getElementById('groupShapeSelect');
+                if (shapeSelectEl) shapeSelectEl.addEventListener('change', loadStageGroupsData);
+            }, 400);
+        });
+
+        // =====================================================================
+        // GÉNÉRATION FICHE TECHNIQUE COMPLÈTE (fiche tech + plan de scène)
+        // =====================================================================
+
+        function generateCompleteSheet(returnBlob) {
+            if (!window.jspdf) {
+                alert('La bibliothèque PDF n\'est pas encore chargée. Attendez quelques secondes et réessayez.');
+                return null;
+            }
+            const { jsPDF } = window.jspdf;
+
+            // Lire les données depuis localStorage
+            const ficheData = JSON.parse(localStorage.getItem('ficheData') || 'null');
+            const patchList = JSON.parse(localStorage.getItem('patchList') || '[]');
+            const returnsList = JSON.parse(localStorage.getItem('returnsList') || '[]');
+
+            const groupName = (ficheData && ficheData.groupName) ? ficheData.groupName : 'Groupe';
+            const doc = new jsPDF();
+
+            function createHeader() {
+                doc.setFillColor(222, 173, 57);
+                doc.rect(0, 0, 210, 45, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(32);
+                doc.setFont('helvetica', 'bold');
+                doc.text(groupName, 105, 20, { align: 'center' });
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'normal');
+                doc.text('FICHE TECHNIQUE AUDIO', 105, 35, { align: 'center' });
+            }
+
+            function addFooters() {
+                const pageCount = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    var pH = doc.internal.pageSize.getHeight();
+                    var pW = doc.internal.pageSize.getWidth();
+                    var centerX = pW / 2;
+                    doc.setDrawColor(193, 154, 62);
+                    doc.setLineWidth(0.5);
+                    doc.line(centerX - 35, pH - 15, centerX + 35, pH - 15);
+                    doc.setFontSize(8);
+                    doc.setTextColor(150);
+                    doc.text('Généré par FICHE TECH CREATOR v2 Beta - ' + new Date().toLocaleDateString('fr-FR'), centerX, pH - 10, { align: 'center' });
+                    doc.setFontSize(7);
+                    doc.setTextColor(120);
+                    doc.text('© 2025 Arnisound Tools - Tous droits réservés', centerX, pH - 6, { align: 'center' });
+                    doc.setFontSize(9);
+                    doc.setTextColor(100);
+                    doc.text(i + '/' + pageCount, pW - 10, pH - 6, { align: 'right' });
+                }
+            }
+
+            // --- PAGE 1 : Informations générales + patch list ---
+            createHeader();
+
+            let y = 55;
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(14);
+            doc.text('INFORMATIONS GÉNÉRALES', 20, y);
+            y += 10;
+            doc.setFontSize(10);
+
+            if (ficheData) {
+                if (ficheData.contactName) { doc.text('Contact technique : ' + ficheData.contactName, 20, y); y += 6; }
+                if (ficheData.contactEmail) { doc.text('Email : ' + ficheData.contactEmail, 20, y); y += 6; }
+                if (ficheData.contactPhone) { doc.text('Téléphone : ' + ficheData.contactPhone, 20, y); y += 6; }
+                if (ficheData.numMusicians) { doc.text('Nombre de musiciens : ' + ficheData.numMusicians, 20, y); y += 6; }
+
+                // Configuration technique - toujours affichée avec phrases génériques
+                {
+                    y += 8;
+                    doc.setFontSize(14);
+                    doc.text('CONFIGURATION TECHNIQUE', 20, y);
+                    y += 10;
+                    doc.setFontSize(10);
+
+                    const tech = ficheData.technical || {};
+
+                    // Régie : générique ou avec préférences si sélectionnées
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Régie :', 20, y);
+                    doc.setFont('helvetica', 'normal');
+                    if (tech.consoles && tech.consoles.length > 0) {
+                        const consolesText = tech.consoles.map(function(c) { return c.name; }).join(', ');
+                        const regieLines = doc.splitTextToSize('Une console numérique et son patch numérique ou analogique. Préférences pour ' + consolesText + '.', 170);
+                        doc.text(regieLines, 20, y + 5);
+                        y += (regieLines.length * 5) + 10;
+                    } else {
+                        doc.text('Une console numérique et son patch numérique ou analogique.', 20, y + 5);
+                        y += 15;
+                    }
+
+                    // Diffusion : générique ou avec type si sélectionné
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Diffusion :', 20, y);
+                    doc.setFont('helvetica', 'normal');
+                    if (tech.speakerSystems && tech.speakerSystems.length > 0) {
+                        const diffLines = doc.splitTextToSize('Un système de diffusion adapté au lieu (Type : ' + tech.speakerSystems.join(', ') + '), égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l\'arrivée du groupe.', 170);
+                        doc.text(diffLines, 20, y + 5);
+                        y += (diffLines.length * 5) + 10;
+                    } else {
+                        const diffLines = doc.splitTextToSize('Un système de diffusion adapté au lieu, égalisé et en phase, garantissant une couverture et une pression homogène en tout point. Le système doit être installé et prêt à fonctionner à l\'arrivée du groupe.', 170);
+                        doc.text(diffLines, 20, y + 5);
+                        y += (diffLines.length * 5) + 10;
+                    }
+
+                    // Retours : générique ou avec préférences si sélectionnées
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Retours :', 20, y);
+                    doc.setFont('helvetica', 'normal');
+                    if (tech.monitorSystems && tech.monitorSystems.length > 0) {
+                        const monLines = doc.splitTextToSize('Des retours de scène adaptés, un par musicien minimum. Préférences : ' + tech.monitorSystems.join(', ') + '.', 170);
+                        doc.text(monLines, 20, y + 5);
+                        y += (monLines.length * 5) + 10;
+                    } else {
+                        doc.text('Des retours de scène adaptés, un par musicien minimum.', 20, y + 5);
+                        y += 15;
+                    }
+
+                    // Effets : uniquement si sélectionnés
+                    if (tech.effects && tech.effects.length > 0) {
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('Effets :', 20, y);
+                        doc.setFont('helvetica', 'normal');
+                        doc.text(tech.effects.join(', '), 20, y + 5);
+                        y += 15;
+                    }
+                }
+
+                // Liste quantitative microphonie et supports
+                if (patchList.length > 0) {
+                    const micCount = {};
+                    const standCount = {};
+                    patchList.forEach(function(item) {
+                        if (item.mic) { micCount[item.mic] = (micCount[item.mic] || 0) + 1; }
+                        if (item.stand && item.stand !== '-') { standCount[item.stand] = (standCount[item.stand] || 0) + 1; }
+                    });
+
+                    y += 8;
+                    try { doc.setGState(new doc.GState({opacity: 0.85})); } catch(e) {}
+                    doc.setFillColor(222, 173, 57);
+                    doc.rect(20, y - 6, 170, 9, 'F');
+                    try { doc.setGState(new doc.GState({opacity: 1.0})); } catch(e) {}
+                    doc.setFontSize(11);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(255, 255, 255);
+                    doc.text('MICROPHONIE ET SUPPORTS', 25, y);
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFont('helvetica', 'normal');
+                    y += 8;
+                    doc.setFontSize(9);
+
+                    const micItems = [
+                        ...Object.entries(micCount).sort().map(function(e) { return { label: e[0], count: e[1] }; }),
+                        ...Object.entries(standCount).sort().map(function(e) { return { label: e[0], count: e[1] }; }),
+                        { label: patchList.length > 1 ? 'Câbles XLR' : 'Câble XLR', count: patchList.length, noPlural: true }
+                    ];
+                    var micRowIndex = 0;
+                    micItems.forEach(function(item) {
+                        if (y > 265) return;
+                        if (micRowIndex % 2 === 0) {
+                            doc.setFillColor(245, 245, 245);
+                            doc.rect(20, y - 4, 170, 6, 'F');
+                        }
+                        doc.setFillColor(222, 173, 57);
+                        doc.rect(22, y - 3, 2, 4, 'F');
+                        doc.setTextColor(0, 0, 0);
+                        doc.text(item.count + 'x', 27, y);
+                        doc.text(item.noPlural ? item.label : item.label + (item.count > 1 ? 's' : ''), 40, y);
+                        y += 6;
+                        micRowIndex++;
+                    });
+                }
+
+                if (ficheData.specialRequests && y < 250) {
+                    y += 5;
+                    doc.setFontSize(14);
+                    doc.text('DEMANDES PARTICULIÈRES', 20, y);
+                    y += 8;
+                    doc.setFontSize(9);
+                    const reqLines = doc.splitTextToSize(ficheData.specialRequests, 170);
+                    doc.text(reqLines, 20, y);
+                    y += reqLines.length * 5;
+                }
+            } else {
+                doc.setFontSize(10);
+                doc.setTextColor(150);
+                doc.text('(Données fiche technique non disponibles — remplissez la fiche technique et revenez ici)', 20, y);
+                doc.setTextColor(0, 0, 0);
+                y += 10;
+            }
+
+            // --- PAGE 2 : Patch list ---
+            if (patchList.length > 0 || returnsList.length > 0) {
+                doc.addPage();
+                createHeader();
+
+                y = 55;
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text('PATCH LIST FACE', 20, y);
+                y += 8;
+                doc.setFontSize(8);
+                doc.setFillColor(0, 0, 0);
+                doc.rect(20, y - 5, 170, 7, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.text('CH', 25, y);
+                doc.text('INSTRUMENT', 40, y);
+                doc.text('MICROPHONE', 100, y);
+                doc.text('PIED', 150, y);
+                y += 7;
+                doc.setTextColor(0, 0, 0);
+
+                patchList.forEach(function(item, index) {
+                    if (y > 270) return;
+                    if (index % 2 === 0) {
+                        doc.setFillColor(240, 240, 240);
+                        doc.rect(20, y - 4, 170, 5, 'F');
+                    }
+                    if (item.color) {
+                        var hex = item.color.replace('#', '');
+                        var r = parseInt(hex.substr(0, 2), 16);
+                        var g = parseInt(hex.substr(2, 2), 16);
+                        var b = parseInt(hex.substr(4, 2), 16);
+                        doc.setFillColor(r, g, b);
+                        doc.rect(23, y - 4, 1.5, 5, 'F');
+                        doc.rect(38, y - 4, 1.5, 5, 'F');
+                        doc.rect(98, y - 4, 1.5, 5, 'F');
+                        doc.rect(148, y - 4, 1.5, 5, 'F');
+                    }
+                    doc.setTextColor(0, 0, 0);
+                    doc.text(String(item.channel || index + 1), 25, y);
+                    doc.text(String(item.instrument || '').substring(0, 30), 40, y);
+                    doc.text(String(item.mic || '').substring(0, 25), 100, y);
+                    doc.text(String(item.stand || '-'), 150, y);
+                    y += 5;
+                });
+
+                if (returnsList.length > 0) {
+                    y += 10;
+                    doc.setFontSize(14);
+                    doc.text('PATCH LIST RETOURS', 20, y);
+                    y += 8;
+                    doc.setFontSize(8);
+                    doc.setFillColor(0, 0, 0);
+                    doc.rect(20, y - 5, 170, 7, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.text('AUX', 25, y);
+                    doc.text('DESTINATION', 50, y);
+                    doc.text('TYPE', 130, y);
+                    y += 7;
+                    doc.setTextColor(0, 0, 0);
+
+                    returnsList.forEach(function(item, index) {
+                        if (y > 270) return;
+                        if (index % 2 === 0) {
+                            doc.setFillColor(240, 240, 240);
+                            doc.rect(20, y - 4, 170, 5, 'F');
+                        }
+                        if (item.color) {
+                            var hex = item.color.replace('#', '');
+                            var r = parseInt(hex.substr(0, 2), 16);
+                            var g = parseInt(hex.substr(2, 2), 16);
+                            var b = parseInt(hex.substr(4, 2), 16);
+                            doc.setFillColor(r, g, b);
+                            doc.rect(23, y - 4, 1.5, 5, 'F');
+                            doc.rect(48, y - 4, 1.5, 5, 'F');
+                            doc.rect(128, y - 4, 1.5, 5, 'F');
+                        }
+                        doc.setTextColor(0, 0, 0);
+                        var auxLabel = item.isStereo ? ('AUX ' + item.aux + '-' + item.auxPair) : ('AUX ' + item.aux);
+                        doc.text(auxLabel, 25, y);
+                        doc.text(String(item.destination || ''), 50, y);
+                        doc.text(String(item.type || ''), 130, y);
+                        y += 5;
+                    });
+                }
+            }
+
+            // --- DERNIÈRE PAGE : Plan de scène (canvas) ---
+            doc.addPage('a4', 'landscape');
+            var canvasEl = stagePlan ? stagePlan.canvas : null;
+            if (canvasEl) {
+                var imgData = canvasEl.toDataURL('image/png');
+                var pdfW = doc.internal.pageSize.getWidth();
+                var pdfH = doc.internal.pageSize.getHeight();
+
+                // En-tête compact
+                doc.setFillColor(222, 173, 57);
+                doc.rect(0, 0, pdfW, 18, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(13);
+                doc.setFont('helvetica', 'bold');
+                doc.text(groupName + ' — PLAN DE SCÈNE', pdfW / 2, 12, { align: 'center' });
+
+                var imgW = pdfW - 20;
+                var ratio = canvasEl.height / canvasEl.width;
+                var imgH = imgW * ratio;
+                var availH = pdfH - 38; // réserver 18mm pour le pied de page
+                if (imgH > availH) {
+                    imgH = availH;
+                    imgW = imgH / ratio;
+                }
+                var offsetX = (pdfW - imgW) / 2;
+                doc.addImage(imgData, 'PNG', offsetX, 20, imgW, imgH);
+            } else {
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text('Plan de scène non disponible', 148.5, 100, { align: 'center' });
+            }
+
+            addFooters();
+            if (returnBlob) {
+                return doc.output('blob');
+            }
+            doc.save('FicheTechComplete_' + groupName.replace(/\s+/g, '_') + '.pdf');
+        }
+
+        function exportStagePlanPatchListPDF() {
+            if (!window.jspdf) {
+                alert('La bibliothèque PDF n\'est pas encore chargée. Attendez quelques secondes et réessayez.');
+                return;
+            }
+            const { jsPDF } = window.jspdf;
+            var patchList = JSON.parse(localStorage.getItem('patchList') || '[]');
+            var returnsList = JSON.parse(localStorage.getItem('returnsList') || '[]');
+
+            // Lire la patch list courante depuis le tableau HTML si plus à jour
+            var rows = document.querySelectorAll('#patch-tbody tr');
+            if (rows.length > 0) {
+                patchList = Array.from(rows).map(function(row, i) {
+                    var cells = row.querySelectorAll('td');
+                    return {
+                        channel: cells[0] ? cells[0].innerText : (i + 1),
+                        instrument: cells[1] ? cells[1].innerText : '',
+                        mic: cells[2] ? cells[2].innerText : '',
+                        stand: cells[3] ? cells[3].innerText : '-'
+                    };
+                });
+            }
+
+            var ficheData = JSON.parse(localStorage.getItem('ficheData') || 'null');
+            var groupName = (ficheData && ficheData.groupName) ? ficheData.groupName : 'Groupe';
+
+            var doc = new jsPDF();
+
+            doc.setFillColor(222, 173, 57);
+            doc.rect(0, 0, 210, 42, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(28);
+            doc.setFont('helvetica', 'bold');
+            doc.text(groupName, 105, 18, { align: 'center' });
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'normal');
+            doc.text('PATCH LIST', 105, 32, { align: 'center' });
+
+            var y = 52;
+            doc.setFontSize(13);
+            doc.setTextColor(0, 0, 0);
+            doc.text('PATCH LIST FACE', 20, y);
+            y += 8;
+            doc.setFontSize(8);
+            doc.setFillColor(0, 0, 0);
+            doc.rect(20, y - 5, 170, 7, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.text('CH', 25, y);
+            doc.text('INSTRUMENT', 40, y);
+            doc.text('MICROPHONE', 100, y);
+            doc.text('PIED', 150, y);
+            y += 7;
+            doc.setTextColor(0, 0, 0);
+
+            patchList.forEach(function(item, index) {
+                if (y > 275) return;
+                if (index % 2 === 0) {
+                    doc.setFillColor(240, 240, 240);
+                    doc.rect(20, y - 4, 170, 5, 'F');
+                }
+                doc.setTextColor(0, 0, 0);
+                doc.text(String(item.channel || index + 1), 25, y);
+                doc.text(String(item.instrument || '').substring(0, 30), 40, y);
+                doc.text(String(item.mic || '').substring(0, 25), 100, y);
+                doc.text(String(item.stand || '-'), 150, y);
+                y += 5;
+            });
+
+            if (returnsList.length > 0) {
+                y += 10;
+                doc.setFontSize(13);
+                doc.text('PATCH LIST RETOURS', 20, y);
+                y += 8;
+                doc.setFontSize(8);
+                doc.setFillColor(0, 0, 0);
+                doc.rect(20, y - 5, 170, 7, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.text('AUX', 25, y);
+                doc.text('DESTINATION', 50, y);
+                doc.text('TYPE', 130, y);
+                y += 7;
+                doc.setTextColor(0, 0, 0);
+
+                returnsList.forEach(function(item, index) {
+                    if (y > 275) return;
+                    if (index % 2 === 0) {
+                        doc.setFillColor(240, 240, 240);
+                        doc.rect(20, y - 4, 170, 5, 'F');
+                    }
+                    doc.setTextColor(0, 0, 0);
+                    var auxLabel = item.isStereo ? ('AUX ' + item.aux + '-' + item.auxPair) : ('AUX ' + item.aux);
+                    doc.text(auxLabel, 25, y);
+                    doc.text(String(item.destination || ''), 50, y);
+                    doc.text(String(item.type || ''), 130, y);
+                    y += 5;
+                });
+            }
+
+            doc.setDrawColor(193, 154, 62);
+            doc.setLineWidth(0.5);
+            doc.line(70, 282, 140, 282);
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            doc.text('Généré par FICHE TECH CREATOR v2 Beta - ' + new Date().toLocaleDateString('fr-FR'), 105, 287, { align: 'center' });
+
+            doc.save('PatchList_' + groupName.replace(/\s+/g, '_') + '.pdf');
+        }
+
+        // === SHARE SHEET ===
+        function openShareSheet() {
+            document.getElementById('share-overlay').classList.add('active');
+            setTimeout(function() {
+                document.getElementById('share-sheet').classList.add('open');
+            }, 10);
+        }
+
+        function closeShareSheet() {
+            document.getElementById('share-sheet').classList.remove('open');
+            setTimeout(function() {
+                document.getElementById('share-overlay').classList.remove('active');
+            }, 350);
+        }
+
+        function shareVia(platform) {
+            closeShareSheet();
+
+            var ficheData = JSON.parse(localStorage.getItem('ficheData') || '{}');
+            var groupName = (ficheData && ficheData.groupName) ? ficheData.groupName : 'Groupe';
+            var messageText = 'Fiche technique audio \u2013 ' + groupName;
+            var fileName = 'FicheTechComplete_' + groupName.replace(/\s+/g, '_') + '.pdf';
+
+            // Générer le PDF sous forme de blob
+            var pdfBlob = generateCompleteSheet(true);
+            if (!pdfBlob) return;
+
+            var pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+            // Utiliser le Web Share API avec pièce jointe si disponible (mobile)
+            if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+                navigator.share({
+                    title: messageText,
+                    text: 'Bonjour,\n\nVeuillez trouver ci-joint la fiche technique audio de ' + groupName + '.\n\nCordialement',
+                    files: [pdfFile]
+                }).catch(function(err) {
+                    if (err.name !== 'AbortError') {
+                        // En cas d'erreur inattendue, télécharger le PDF
+                        var url = URL.createObjectURL(pdfBlob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }
+                });
+            } else {
+                // Fallback : télécharger le PDF puis ouvrir la plateforme
+                var url = URL.createObjectURL(pdfBlob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                var encoded = encodeURIComponent(messageText);
+                setTimeout(function() {
+                    switch (platform) {
+                        case 'whatsapp':
+                            window.open('https://api.whatsapp.com/send?text=' + encoded, '_blank');
+                            break;
+                        case 'telegram':
+                            window.open('https://t.me/share/url?url=&text=' + encoded, '_blank');
+                            break;
+                        case 'messenger':
+                            window.open('https://www.messenger.com/', '_blank');
+                            break;
+                        case 'mail':
+                            var body = encodeURIComponent(
+                                'Bonjour,\n\nVeuillez trouver ci-joint la fiche technique audio de ' + groupName + '.\n\nLe fichier PDF a \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9 sur votre appareil.\n\nCordialement'
+                            );
+                            window.location.href = 'mailto:?subject=' + encoded + '&body=' + body;
+                            break;
+                    }
+                }, 600);
+            }
+        }
+
+        // Câblage des boutons de la barre d'action en bas
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('bottom-generate-complete').addEventListener('click', function() { generateCompleteSheet(); });
+            document.getElementById('bottom-export-png').addEventListener('click', function() {
+                if (stagePlan) stagePlan.exportToPNG();
+            });
+            document.getElementById('bottom-patch-pdf').addEventListener('click', exportStagePlanPatchListPDF);
+            document.getElementById('bottom-share').addEventListener('click', openShareSheet);
+        });
 </script>
+
+    <!-- Footer de copyright -->
+    <footer style="background: #000000;
+                   color: #666;
+                   text-align: center;
+                   padding: 20px 20px 90px 20px;
+                   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                   font-size: 0.85em;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <p style="margin: 5px 0;">
+                <strong style="color: #c19a3e;">Stage Plan - Fiche Tech Creator v2 Beta</strong>
+            </p>
+            <p style="margin: 5px 0; color: #888;">
+                © 2025 Théo Arnissolle - Tous droits réservés
+            </p>
+            <p style="margin: 5px 0;">
+                <a href="mailto:arnisound.tools@gmail.com"
+                   style="color: #c19a3e; text-decoration: none;">
+                    arnisound.tools@gmail.com
+                </a>
+            </p>
+            <p style="margin: 10px 0 5px 0; font-size: 0.85em; color: #777;">
+                Usage personnel et non-commercial uniquement •
+                <a href="LICENSE.txt" style="color: #c19a3e; text-decoration: none;">Voir la licence</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- BARRE D'ACTION EN BAS DE PAGE -->
+    <div id="bottom-action-bar">
+        <div class="bottom-bar-inner">
+            <span class="bottom-bar-label">📤 Exporter :</span>
+            <button id="bottom-generate-complete" class="bottom-btn bottom-btn-primary" title="Génère un PDF avec la fiche technique + le plan de scène">
+                📄 Fiche technique complète (PDF)
+            </button>
+            <button id="bottom-export-png" class="bottom-btn bottom-btn-secondary" title="Exporte le stage plan en PNG">
+                🖼️ Stage Plan (PNG)
+            </button>
+            <button id="bottom-patch-pdf" class="bottom-btn bottom-btn-secondary" title="Exporte la patch list en PDF">
+                📊 Patch List (PDF)
+            </button>
+            <button id="bottom-share" class="bottom-btn bottom-btn-share" title="Partager la fiche technique sur une messagerie">
+                🔗 Partager
+            </button>
+        </div>
+    </div>
+
+    <!-- SHARE OVERLAY -->
+    <div id="share-overlay" onclick="closeShareSheet()"></div>
+    <div id="share-sheet">
+        <div class="share-sheet-handle"></div>
+        <div class="share-sheet-title">Partager la fiche technique</div>
+        <div class="share-sheet-buttons">
+            <!-- WhatsApp -->
+            <button class="share-platform-btn" onclick="shareVia('whatsapp')">
+                <span class="share-icon" style="background:#25D366;">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                </span>
+                WhatsApp
+            </button>
+            <!-- Telegram -->
+            <button class="share-platform-btn" onclick="shareVia('telegram')">
+                <span class="share-icon" style="background:#2CA5E0;">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </span>
+                Telegram
+            </button>
+            <!-- Messenger -->
+            <button class="share-platform-btn" onclick="shareVia('messenger')">
+                <span class="share-icon" style="background:linear-gradient(135deg,#0078FF,#A334FA,#FF5C5C);">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.744 6.614 4.469 8.654V24l4.088-2.242c1.092.3 2.246.464 3.443.464 6.627 0 12-4.975 12-11.111S18.627 0 12 0zm1.191 14.963l-3.055-3.26-5.963 3.26L10.732 8l3.131 3.259L19.752 8l-6.561 6.963z"/>
+                    </svg>
+                </span>
+                Messenger
+            </button>
+            <!-- Mail -->
+            <button class="share-platform-btn" onclick="shareVia('mail')">
+                <span class="share-icon" style="background:#EA4335;">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                </span>
+                Mail
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>
